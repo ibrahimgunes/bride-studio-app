@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Bride Studio – AI Wedding Dress Try On</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1d1d1f;
+  background: #ffffff;
+}
+
+h1,h2,h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 24px;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg,#f6f1ec,#eef2f9);
+  padding: 80px 0 60px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.nav img {
+  height: 42px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero span {
+  display: inline-block;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: 44px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 17px;
+  color: #555;
+  margin-bottom: 32px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #000;
+  color: #fff;
+  padding: 14px 26px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.hero img {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* SECTIONS */
+section {
+  padding: 90px 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title h2 {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.section-title p {
+  color: #666;
+}
+
+/* HOW IT WORKS */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+  text-align: center;
+}
+
+.step img {
+  height: 110px;
+  margin-bottom: 20px;
+}
+
+.step h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.step p {
+  color: #666;
+}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.features img {
+  width: 100%;
+  max-width: 420px;
+}
+
+.feature {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.feature i {
+  font-size: 22px;
+  color: #c9a16e;
+  margin-top: 4px;
+}
+
+/* DOWNLOAD */
+.download {
+  background: #faf7f5;
+  text-align: center;
+}
+
+/* FOOTER */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media(max-width:900px) {
+  .hero, .features, .steps {
+    grid-template-columns: 1fr;
+  }
+  .hero img {
+    margin: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+  <div class="hero">
+      <div>
+        <span>Designed for Brides</span>
+        <h1>See Yourself as a Bride<br>Before the Big Day</h1>
+        <p>
+          Bride Studio lets you try on wedding dresses using AI.
+          Upload one photo, choose a dress, and see how it truly looks on you.
+        </p>
+        <a href="#" class="btn">
+          <i class="fa fa-apple"></i> Download on App Store
+        </a>
+      </div>
+
+      <div>
+        <img src="assets/images/Main.png" alt="Bride Studio App">
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="section-title">
+      <h2>How It Works</h2>
+      <p>Three simple steps</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <img src="assets/images/character.png">
+        <h3>Upload a Photo</h3>
+        <p>A clear photo is enough.</p>
+      </div>
+      <div class="step">
+        <img src="assets/images/wd1.png">
+        <h3>Choose a Dress</h3>
+        <p>Select the style you love.</p>
+      </div>
+      <div class="step">
+        <img src="assets/images/upload-photo.png">
+        <h3>View the Result</h3>
+        <p>See yourself as a bride.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="features">
+      <img src="assets/images/Main2.png">
+
+      <div>
+        <div class="feature">
+          <i class="fa fa-magic"></i>
+          <div>
+            <h3>Realistic Results</h3>
+            <p>Dress shape, fabric and proportions stay natural.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <i class="fa fa-heart"></i>
+          <div>
+            <h3>Save & Compare</h3>
+            <p>Keep your favorite looks.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <i class="fa fa-lock"></i>
+          <div>
+            <h3>Privacy First</h3>
+            <p>Your photos are never shared.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="download">
+  <div class="container">
+    <div class="section-title">
+      <h2>Your Dress, Your Moment</h2>
+      <p>Discover your bridal look today.</p>
+    </div>
+
+    <a href="#" class="btn">
+      <i class="fa fa-apple"></i> Download on App Store
+    </a>
+  </div>
+</section>
+
+<footer>
+  <img src="assets/images/logo.png" height="32"><br><br>
+  © 2025 Bride Studio
+</footer>
+
+</body>
+</html>
