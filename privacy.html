@@ -5,17 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy – Bride Studio</title>
 <style>
-body{
-  font-family: Inter, Arial, sans-serif;
-  max-width: 800px;
-  margin: auto;
-  padding: 40px;
-  line-height: 1.7;
-  color: #333;
-}
-h1,h2{margin-bottom:16px}
-p{margin-bottom:14px}
-a{color:#000;text-decoration:underline}
+  body{
+    font-family: Inter, Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 40px;
+    line-height: 1.7;
+    color: #333;
+  }
+  h1,h2{margin-bottom:16px; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+  h3{margin-top: 24px; color: #444;}
+  p{margin-bottom:14px}
+  ul{margin-bottom: 20px;}
+  li{margin-bottom: 8px;}
+  a{color:#000;text-decoration:underline}
+  .highlight-box {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-left: 4px solid #333;
+    margin: 20px 0;
+  }
 </style>
 </head>
 <body>
@@ -25,15 +34,15 @@ a{color:#000;text-decoration:underline}
 <p><strong>Effective Date:</strong> January 2025</p>
 
 <p>
-Bride Studio ("we", "our", or "us") respects your privacy.
+Bride Studio ("we", "our", or "us") respects your privacy. 
 This Privacy Policy explains how information is collected, used, and protected when you use the Bride Studio mobile application.
 </p>
 
 <h2>1. Information We Collect</h2>
 
-<p><strong>Photos:</strong><br>
-When you upload a photo to use the wedding dress try-on feature, the image is processed solely to generate your virtual bridal preview.
-Uploaded photos are not publicly shared.
+<p><strong>Photos & Face Data:</strong><br>
+When you upload a photo to use the "Virtual Try-On" feature, our app processes the image to identify <strong>facial landmarks and body contours</strong>. 
+This "Face Data" is used strictly to align, scale, and realistically overlay wedding dresses onto your photo.
 </p>
 
 <p><strong>Usage Data:</strong><br>
@@ -41,83 +50,70 @@ We may collect anonymous usage information such as app interactions, feature usa
 </p>
 
 <p><strong>Personal Information:</strong><br>
-Bride Studio does not require you to provide personal information such as your name, address, or phone number to use the app.
+Bride Studio does not require you to provide sensitive personal information such as your name, address, or phone number to use the basic features of the app.
 </p>
 
-<h2>2. Firebase Services</h2>
+<div class="highlight-box">
+  <h3>Special Disclosure on Face Data</h3>
+  <ul>
+    <li><strong>No Identification:</strong> We do not use face data to identify the user's personal identity or for biometric authentication.</li>
+    <li><strong>Purpose:</strong> The data is used solely for the technical simulation of bridal wear.</li>
+    <li><strong>No Third-Party Sharing:</strong> We do not sell, rent, or share face data with third-party advertisers or data brokers.</li>
+  </ul>
+</div>
+
+<h2>2. Firebase Services & Data Storage</h2>
 
 <p>
-Bride Studio uses Google Firebase services to operate and improve the app. These services may collect and process data according to Google's Privacy Policy.
+Bride Studio uses <strong>Google Firebase</strong> services to operate. Your data is stored on secure Google servers.
 </p>
 
 <ul>
-  <li><strong>Firebase Analytics</strong> – to understand app usage and improve user experience</li>
-  <li><strong>Firebase Crashlytics</strong> – to identify and fix app crashes</li>
-  <li><strong>Firebase Authentication (if enabled)</strong> – to manage secure sign-in</li>
-  <li><strong>Firebase Storage</strong> – to temporarily process uploaded images</li>
+  <li><strong>Firebase Storage & Firestore:</strong> Used to store your uploaded profile photos and the AI-generated "tried-on" images securely.</li>
+  <li><strong>Firebase Cloud Functions:</strong> Used to process the image transformation via our AI algorithms.</li>
+  <li><strong>Firebase Analytics & Crashlytics:</strong> Used to monitor app performance and fix bugs.</li>
 </ul>
 
 <p>
-Google’s Privacy Policy can be viewed here:<br>
-<a href="https://policies.google.com/privacy" target="_blank">
-https://policies.google.com/privacy
-</a>
+Google’s Privacy Policy can be viewed here: 
+<a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a>
 </p>
 
-<h2>3. How We Use Your Information</h2>
-
-<ul>
-  <li>To generate AI-based wedding dress previews</li>
-  <li>To maintain and improve app functionality</li>
-  <li>To monitor app performance and prevent crashes</li>
-</ul>
-
-<h2>4. Photo Processing & Retention</h2>
+<h2>3. Data Retention and Deletion</h2>
 
 <p>
-Uploaded photos are used only for image generation purposes.
-Photos are processed securely and are deleted after processing or within a limited retention period required for service operation.
+<strong>Retention:</strong> We retain your uploaded photos and generated images only as long as you maintain an active account in the app.
+</p>
+<p>
+<strong>Deletion:</strong> You have full control over your data. You can delete your photos or your entire account at any time via the in-app settings. 
+Upon deletion, all photos and associated face data are <strong>permanently removed</strong> from our Firebase Storage and Firestore databases.
 </p>
 
-<h2>5. Data Sharing</h2>
+<h2>4. Data Sharing</h2>
 
 <p>
-Bride Studio does not sell, rent, or trade your personal data.
-Data is shared only with trusted service providers (such as Firebase) strictly for app functionality and analytics.
+Bride Studio does not sell, rent, or trade your data. 
+Data is processed only through our infrastructure providers (Google Firebase) strictly for app functionality. 
+We do not disclose face data to any third parties except as required by law.
 </p>
 
-<h2>6. Data Security</h2>
+<h2>5. Data Security</h2>
 
 <p>
-We take reasonable measures to protect your information using industry-standard security practices.
-However, no method of transmission or storage is 100% secure.
+We use industry-standard encryption (SSL/TLS) to protect your data during transmission and at rest within Firebase. 
+However, please note that no electronic transmission over the internet is 100% secure.
 </p>
 
-<h2>7. Children’s Privacy</h2>
+<h2>6. Children’s Privacy</h2>
 
 <p>
-Bride Studio is not intended for users under the age of 13.
-We do not knowingly collect personal information from children.
+Bride Studio is not intended for users under the age of 13. We do not knowingly collect personal information from children.
 </p>
 
-<h2>8. Your Rights</h2>
+<h2>7. Contact Us</h2>
 
 <p>
-You may stop using the app at any time.
-If you have questions about your data or wish to request deletion, you may contact us.
-</p>
-
-<h2>9. Changes to This Policy</h2>
-
-<p>
-We may update this Privacy Policy from time to time.
-Changes will be reflected on this page.
-</p>
-
-<h2>10. Contact Us</h2>
-
-<p>
-If you have any questions about this Privacy Policy, contact us at:
+If you have any questions regarding your data or this Privacy Policy, please contact us at:
 </p>
 
 <p>
