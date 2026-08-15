@@ -105,17 +105,11 @@ header nav a:hover{color:var(--gold)}
 .pin-step .n{font-family:var(--serif);font-size:15px;color:var(--gold);letter-spacing:.1em}
 .pin-step h3{font-size:clamp(28px,3.6vw,46px);margin:14px 0 16px}
 .pin-step p{color:#5f584f;max-width:26em;margin:0}
-.pin-media{position:relative;aspect-ratio:3/4;border-radius:20px;overflow:hidden;background:#efe9e3}
-.pin-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transform:scale(1.08);transition:opacity .9s ease,transform 1.4s cubic-bezier(.16,.86,.26,1)}
-.pin-media img.on{opacity:1;transform:none}
-.pin-spacer{height:300svh}
+.pin-spacer{height:320svh}
 @media(max-width:880px){
   .pin-inner{grid-template-columns:1fr;height:auto;position:relative;padding:70px 30px;gap:30px}
   .pin-spacer{display:none}
   .pin-step{position:relative;opacity:1;transform:none;margin-bottom:44px}
-  .pin-media img{opacity:1;transform:none}
-  .pin-media img:not(:first-child){display:none}
 }
 
 /* ── 4. Yatay galeri ───────────────────────────────────────────────────── */
@@ -133,97 +127,38 @@ header nav a:hover{color:var(--gold)}
 @media(max-width:880px){.rail-head{flex-direction:column;align-items:flex-start}}
 
 
-/* ── Dönüşüm ───────────────────────────────────────────────────────────────
-   Sitenin geri kalanı gelinlik gösteriyor; burası ne yaptığımızı gösteriyor.
-   İlk hâli iki kareyi yan yana koyup arasına ok çizmekti — fikri anlatıyordu
-   ama gösterdiği şey iki ayrı fotoğraftı, dönüşüm değil.
+/* ── Sahne: üç adımın kendisi dönüşüm ──────────────────────────────────────
+   Sayfada iki ayrı sabitlenen bölüm vardı ve ikisi de aynı hikâyeyi
+   anlatıyordu: biri "nasıl çalışır" diye üç adım sayıyor, öteki fotoğrafın
+   gelinliğe dönüşünü gösteriyordu. Ziyaretçi aynı şeyi iki kez okuyordu.
 
-   Şimdi tek kare var ve içinde dönüşüyor: bölüm ekrana sabitleniyor, kaydırma
-   ilerledikçe verdiği fotoğraf yerini gelinlikli sonuca bırakıyor ve aradan
-   altın bir çizgi geçiyor. İlerleme kaydırmadan okunduğu için hız kullanıcıda
-   — geri kaydırınca dönüşüm geri sarıyor. */
-.tf{position:relative;background:var(--dark);color:#fff}
-.tf-stick{position:sticky;top:0;height:100svh;display:flex;align-items:center;overflow:hidden}
-.tf-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center;
-  max-width:1180px;margin:0 auto;padding:0 30px;width:100%}
-.tf .eyebrow{color:rgba(255,255,255,.6)}
-.tf h2{font-size:clamp(28px,4vw,52px);max-width:13em}
-.tf .sub{color:rgba(255,255,255,.6);max-width:30em;margin:20px 0 0}
-.tf-legend{display:flex;gap:26px;margin-top:34px;font:600 10px/1 var(--sans);
-  letter-spacing:.16em;text-transform:uppercase}
-.tf-legend span{color:rgba(255,255,255,.34);transition:color .4s ease}
-.tf-legend .on{color:var(--gold)}
+   Tek bölüm kaldı ve üç adımın **kendisi** dönüşüm oldu: birinci durakta
+   yalnızca kadının fotoğrafı var, ikincide gelinlik yandan geliyor,
+   üçüncüde ikisi birleşip yerini sonuca bırakıyor. Kartların yeri kaydırma
+   ilerlemesinden hesaplanıyor, yani hız kullanıcıda ve geri kaydırınca
+   dönüşüm geri sarıyor.
 
-/* Birleşme — üç kart, 3B derinlikte.
-   Üç görseli yan yana dizmek denklemi anlatıyordu ama olayı göstermiyordu:
-   üç ayrı fotoğraf duruyordu, birleşen bir şey yoktu.
-   Şimdi sahnenin bir derinliği var. Kadının fotoğrafı solda, gelinlik sağda,
-   ikisi de kameraya dönük değil — açılı duruyorlar ve uzakta. Kaydırdıkça
-   ortaya süzülüp düzleşiyorlar, üst üste biniyorlar ve yerlerini sonuca
-   bırakıyorlar. Model dosyası yok, WebGL yok: derinlik `perspective` ile,
-   yani sayfa hâlâ tek dosya ve telefonda anında açılıyor. */
-.tf-scene{position:relative;height:min(78svh,720px);perspective:1400px;perspective-origin:50% 45%}
-.tf-card{position:absolute;top:50%;left:50%;width:clamp(180px,26vw,300px);aspect-ratio:3/4;
-  border-radius:16px;overflow:hidden;background:#221b18;box-shadow:0 30px 70px rgba(0,0,0,.5);
-  transform-style:preserve-3d;will-change:transform,opacity}
-.tf-card img{width:100%;height:100%;object-fit:cover}
-.tf-card::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)}
-
-/* Yüz solda ve uzakta; ilerledikçe ortaya gelip düzleşiyor ve soluyor. */
-.tf-face{
-  transform:
-    translate(-50%,-50%)
-    translate3d(calc(-32% + var(--p) * 32%), calc(-6% + var(--p) * 6%), calc(-260px + var(--p) * 260px))
-    rotateY(calc(26deg - var(--p) * 26deg))
-    rotateZ(calc(-5deg + var(--p) * 5deg));
-  opacity:calc(1 - var(--p) * .85);
-}
-/* Gelinlik sağda, aynı yolu ters yönden. */
-.tf-dress{
-  transform:
-    translate(-50%,-50%)
-    translate3d(calc(32% - var(--p) * 32%), calc(8% - var(--p) * 8%), calc(-180px + var(--p) * 180px))
-    rotateY(calc(-24deg + var(--p) * 24deg))
-    rotateZ(calc(5deg - var(--p) * 5deg));
-  opacity:calc(1 - var(--p) * .85);
-}
-/* Sonuç ortada bekliyor: uzakta, küçük ve görünmez. İkisi üstüne kapandıkça
-   büyüyerek öne çıkıyor ve sahneyi devralıyor. */
-.tf-result{
-  width:clamp(230px,34vw,400px);
-  transform:
-    translate(-50%,-50%)
-    translate3d(0,0,calc(-420px + var(--p) * 460px))
-    rotateY(calc(-8deg + var(--p) * 8deg));
-  opacity:calc(var(--p) * var(--p));
-  box-shadow:0 50px 110px rgba(0,0,0,.6);
-}
-/* Birleşme anında ortadan geçen altın parıltı. */
-.tf-flash{position:absolute;top:50%;left:50%;width:min(70vw,560px);height:2px;
-  transform:translate(-50%,-50%) scaleX(calc(.4 + var(--p) * .6));
+   Derinlik `perspective` ile: model dosyası ve WebGL yok, sayfa tek belge
+   kalıyor ve telefonda anında açılıyor. */
+.scene{position:relative;height:min(74svh,700px);perspective:1500px;perspective-origin:50% 46%}
+.scene .card{position:absolute;top:50%;left:50%;width:clamp(190px,25vw,300px);aspect-ratio:3/4;
+  margin:0;border-radius:18px;overflow:hidden;background:#efe9e3;
+  box-shadow:0 34px 80px rgba(60,55,50,.28);transform-style:preserve-3d;
+  will-change:transform,opacity}
+.scene .card img{width:100%;height:100%;object-fit:cover}
+.scene .card::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(60,55,50,.12);border-radius:18px}
+.scene .result{width:clamp(240px,32vw,390px)}
+/* Birleşme anında ortadan geçen altın çizgi. */
+.scene .flash{position:absolute;top:50%;left:50%;width:min(64vw,540px);height:2px;
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:calc(1 - abs(var(--p) - .55) * 3.4);
-  box-shadow:0 0 40px 10px rgba(189,153,115,.4);pointer-events:none}
-
-.tf-labels{display:flex;gap:22px;margin-top:26px;font:600 10px/1 var(--sans);
-  letter-spacing:.16em;text-transform:uppercase}
-.tf-labels span{color:rgba(255,255,255,.34);transition:color .45s ease}
-.tf-labels .on{color:var(--gold)}
-
-/* Üç kadın: hangisinin gösterildiğini seçen küçük kareler. */
-.tf-pick{display:flex;gap:10px;margin-top:22px}
-.tf-pick button{width:52px;height:52px;padding:0;border:0;border-radius:10px;overflow:hidden;
-  background:#221b18;cursor:pointer;opacity:.4;transition:opacity .35s ease,transform .35s ease}
-.tf-pick button.on{opacity:1;transform:translateY(-3px);box-shadow:0 0 0 1px var(--gold)}
-.tf-pick img{width:100%;height:100%;object-fit:cover}
-.tf-spacer{height:220svh}
-@media(max-width:900px){
-  .tf-stick{position:relative;height:auto;padding:70px 0}
-  .tf-grid{grid-template-columns:1fr;gap:26px}
-  .tf-col{height:auto}
-  .tf-inputs{height:120px}
-  .tf-frame{aspect-ratio:1;flex:0 0 auto}
-  .tf-spacer{display:none}
+  box-shadow:0 0 40px 10px rgba(189,153,115,.45);pointer-events:none;opacity:0}
+.scene .cap{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);
+  font:600 10px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--taupe)}
+@media(max-width:880px){
+  .scene{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;perspective:none}
+  .scene .card{position:relative;top:auto;left:auto;width:auto;transform:none!important;opacity:1!important}
+  .scene .result{grid-column:1/-1}
+  .scene .flash,.scene .cap{display:none}
 }
 
 /* ── 5. Sayılar ────────────────────────────────────────────────────────── */
@@ -331,10 +266,12 @@ footer a:hover{color:#fff}
            side, and to send to whoever you are taking with you.</p>
       </article>
     </div>
-    <div class="pin-media">
-      <img class="on" src="assets/img/D0201.jpg" alt="A bride in a classic organza A-line gown" loading="lazy">
-      <img src="assets/img/D0220.jpg" alt="A bride in a bohemian lace mermaid gown" loading="lazy">
-      <img src="assets/img/D0247.jpg" alt="A bride in a classic mikado ballgown with a halter neckline" loading="lazy">
+    <div class="scene" id="scene">
+      <figure class="card face"><img src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></figure>
+      <figure class="card dress"><img src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></figure>
+      <figure class="card result"><img src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown"></figure>
+      <div class="flash"></div>
+      <div class="cap" id="sceneCap">Her photo</div>
     </div>
   </div>
   <div class="pin-spacer"></div>
@@ -374,44 +311,6 @@ footer a:hover{color:#fff}
 </section>
 
 
-
-<!-- Dönüşüm -->
-<section class="tf" id="tf">
-  <div class="tf-stick">
-    <div class="tf-grid">
-      <div>
-        <p class="eyebrow">What actually happens</p>
-        <div class="rule"></div>
-        <h2>Her photograph goes in. She comes back wearing the gown.</h2>
-        <p class="sub">
-          The face is hers, the skin tone is hers, the hair is hers. Nothing is
-          swapped for a model — what you see is the photograph she uploaded, in
-          a dress she has not tried on yet.
-        </p>
-        <div class="tf-pick" id="tfPick">
-          <button class="on" data-i="1" aria-label="First example"><img src="assets/img/tf1-before.jpg" alt=""></button>
-          <button data-i="2" aria-label="Second example"><img src="assets/img/tf2-before.jpg" alt=""></button>
-          <button data-i="3" aria-label="Third example"><img src="assets/img/tf3-before.jpg" alt=""></button>
-        </div>
-      </div>
-
-      <div id="tfFrame" style="--p:0">
-        <div class="tf-scene">
-          <div class="tf-card tf-face"><img id="tfFace" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></div>
-          <div class="tf-card tf-dress"><img id="tfDress" src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></div>
-          <div class="tf-card tf-result"><img id="tfA" src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown"></div>
-          <div class="tf-flash"></div>
-        </div>
-        <div class="tf-labels">
-          <span id="lg1" class="on">Her photo</span>
-          <span id="lg2" class="on">The gown</span>
-          <span id="lg3">Her, wearing it</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="tf-spacer"></div>
-</section>
 
 <section class="figures">
   <div class="wrap figures-grid">
@@ -477,7 +376,6 @@ footer a:hover{color:#fff}
   var stageBg = document.getElementById('stageBg');
   var pin = document.querySelector('.pin');
   var steps = document.querySelectorAll('.pin-step');
-  var shots = document.querySelectorAll('.pin-media img');
   var ticking = false;
 
   function frame(){
@@ -489,21 +387,56 @@ footer a:hover{color:#fff}
     // Perde görseli metinden yavaş kayıyor — derinlik hissini veren şey bu.
     if (y < innerHeight * 1.5) stageBg.style.transform = 'translate3d(0,' + (y * 0.3) + 'px,0)';
 
-    // Sabitlenen bölüm: yazı dururken kare değişiyor. Hangi adımda olduğumuzu
-    // bölümün kendi içindeki ilerlemeden okuyoruz, sayfa konumundan değil.
+    // Sabitlenen bölüm: yazı ve sahne birlikte ilerliyor.
+    //
+    // Kartların yeri tek bir ilerleme sayısından hesaplanıyor. CSS'e
+    // bırakmak yerine burada hesaplanıyor çünkü üç durağın her biri farklı
+    // bir yol izliyor ve tek bir `calc` zinciriyle yazmak okunmaz oluyordu.
     if (pin && innerWidth > 880) {
       var r = pin.getBoundingClientRect();
       var total = pin.offsetHeight - innerHeight;
       if (total > 0) {
         var p = Math.min(Math.max(-r.top / total, 0), 0.999);
         var i = Math.floor(p * steps.length);
-        for (var k = 0; k < steps.length; k++) {
-          steps[k].classList.toggle('on', k === i);
-          if (shots[k]) shots[k].classList.toggle('on', k === i);
+        for (var k = 0; k < steps.length; k++) steps[k].classList.toggle('on', k === i);
+
+        var scene = document.getElementById('scene');
+        if (scene) {
+          // Her durak kendi içinde 0-1 ilerliyor: kartlar duraklar arasında
+          // süzülüyor, adım değişince zıplamıyor.
+          var t = p * 3;                       // 0 → 3
+          var face = scene.querySelector('.face');
+          var dress = scene.querySelector('.dress');
+          var res = scene.querySelector('.result');
+          var flash = scene.querySelector('.flash');
+          var cap = document.getElementById('sceneCap');
+          var cl = function (v) { return Math.min(Math.max(v, 0), 1); };
+
+          // 1. durak: yüz ortada ve tek başına.
+          // 2. durak: yüz sola çekilir, gelinlik sağdan gelir.
+          // 3. durak: ikisi ortada birleşip solar, sonuç derinlikten büyür.
+          var s2 = cl(t - 1), s3 = cl(t - 2);
+          var fx = -s2 * 26 + s3 * 26, fz = -s2 * 120 - s3 * 260;
+          face.style.transform = 'translate(-50%,-50%) translate3d(' + fx + '%,0,' + fz + 'px)' +
+            ' rotateY(' + (s2 * 16 - s3 * 16) + 'deg)';
+          face.style.opacity = (1 - s3 * 0.9).toFixed(3);
+
+          var dx = (1 - s2) * 78 + 26 - s3 * 26, dz = -(1 - s2) * 320 - s3 * 240;
+          dress.style.transform = 'translate(-50%,-50%) translate3d(' + dx + '%,0,' + dz + 'px)' +
+            ' rotateY(' + (-s2 * 14 + s3 * 14 - (1 - s2) * 20) + 'deg)';
+          dress.style.opacity = (cl(t - 0.75) * (1 - s3 * 0.9)).toFixed(3);
+
+          res.style.transform = 'translate(-50%,-50%) translate3d(0,0,' + (-420 + s3 * 430) + 'px)' +
+            ' rotateY(' + (-10 + s3 * 10) + 'deg)';
+          res.style.opacity = (s3 * s3).toFixed(3);
+
+          flash.style.opacity = Math.max(0, 1 - Math.abs(s3 - 0.35) * 4).toFixed(3);
+          flash.style.transform = 'translate(-50%,-50%) scaleX(' + (0.4 + s3 * 0.6).toFixed(3) + ')';
+
+          cap.textContent = i === 0 ? 'Her photo' : (i === 1 ? 'Her photo + the gown' : 'Her, wearing it');
         }
       }
     }
-    tfFrameUpdate();
     ticking = false;
   }
 
