@@ -148,14 +148,13 @@ header nav a:hover::after{transform:scaleX(1)}
 .stage-media::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,var(--cream) 0%,transparent 12%)}
 
-/* Kaydırma işareti kendi sütununun altında, ortada.
-   Ekranın tam ortası iki sütunun sınırına denk geliyor ve işaretin yarısı
-   fotoğrafın üstünde kalıyordu; sola yapıştırmak da onu boşlukta bırakmıştı.
-   Ait olduğu yer krem yarının ortası. */
-.scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;
-  text-align:center;
-  font:600 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--taupe)}
-.scroll-cue i{display:block;width:1px;height:34px;background:var(--hair);margin:10px auto 0;
+/* Ekranın altında, tam ortada — perdenin tamamına ait olduğu için.
+   İki sütunun dikişine denk geliyor, o yüzden hem krem hem fotoğraf üstünde
+   okunması gerekiyor: yazı beyaz ve altında ince bir gölge var. */
+.scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:5;
+  text-align:center;color:#fff;text-shadow:0 1px 12px rgba(20,16,14,.5);
+  font:600 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase}
+.scroll-cue i{display:block;width:1px;height:34px;background:rgba(255,255,255,.6);margin:10px auto 0;
   transform-origin:top;animation:cue 2.1s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -379,6 +378,7 @@ footer a:hover{color:#fff}
 @media(max-width:760px){
   .rise{transform:translateY(26px);transition-duration:.6s}
 }
+
 
 
 
@@ -610,6 +610,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
 <link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
 <link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 </head>
 <body>
 
@@ -635,11 +647,11 @@ header nav .lang-menu a.on{color:var(--gold)}
       </p>
       <a class="badge fade-up" href="https://apps.apple.com/app/id6741838118"><img src="/assets/appstore-badge.svg" alt="App Store से डाउनलोड करें" height="54"></a>
     </div>
-    <div class="scroll-cue">स्क्रॉल<i></i></div>
   </div>
   <div class="stage-media" id="stageBg">
     <img src="/assets/img/D0247.jpg" alt="A bride in a classic mikado ballgown" fetchpriority="high">
   </div>
+  <div class="scroll-cue">स्क्रॉल<i></i></div>
 </section>
 
 <div class="ticker" aria-hidden="true">
