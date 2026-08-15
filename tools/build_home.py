@@ -281,17 +281,22 @@ def build(lang, src):
 
 
 LANG_CSS = """
-.lang{position:relative;font-size:13px;margin-left:22px}
-.lang summary{list-style:none;cursor:pointer;color:inherit;opacity:.8;padding:5px 11px;
-  border:1px solid currentColor;border-radius:999px}
-.lang summary::-webkit-details-marker{display:none}
-.lang summary::after{content:" ▾";opacity:.6}
-.lang-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:80;background:#fff;color:var(--ink);
-  border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:172px;
-  box-shadow:0 20px 44px rgba(0,0,0,.22);display:grid;gap:2px}
-.lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;margin:0}
-.lang-menu a:hover{background:var(--cream)}
-.lang-menu a.on{color:var(--gold)}
+/* Dil menüsü.
+   Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
+   bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
+   ilk hâlinde beyaz zemine beyaz yazı düştü ve menü okunmaz oldu. */
+header nav .lang{position:relative;font-size:13px;margin-left:22px}
+header nav .lang summary{list-style:none;cursor:pointer;color:inherit;opacity:.85;
+  padding:5px 12px;border:1px solid currentColor;border-radius:999px}
+header nav .lang summary::-webkit-details-marker{display:none}
+header nav .lang summary::after{content:" ▾";opacity:.6}
+header nav .lang-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:80;
+  background:#fff;border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:180px;
+  box-shadow:0 20px 44px rgba(0,0,0,.24);display:grid;gap:2px}
+header nav .lang-menu a{display:block;margin:0;padding:9px 12px;border-radius:9px;
+  font-size:14px;color:var(--ink);opacity:1}
+header nav .lang-menu a:hover{background:var(--cream);color:var(--ink)}
+header nav .lang-menu a.on{color:var(--gold)}
 """
 
 
