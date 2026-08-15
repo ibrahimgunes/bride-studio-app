@@ -319,6 +319,62 @@ footer a:hover{color:#fff}
 
 
 
+
+/* ── Telefon ───────────────────────────────────────────────────────────────
+   Sayfa geniş ekrana göre kurulmuştu ve dar ekranda birkaç yerden kırılıyordu:
+   menüdeki dört öğe hapın içine sığmayıp taşıyordu, perde ekranı doldurup
+   altındaki hiçbir şeyi göstermiyordu, ve sabitlenen sahne dokunmatikte
+   sürüklemeyi kilitliyordu.
+
+   Telefonda kurala uymak yerine sıraya uyuluyor: önce söz, sonra gelinlik,
+   sonra adımlar. Dar ekranda hareket de azalıyor — parmakla kaydırırken
+   sürekli bir şeyin belirmesi okumayı zorlaştırıyor. */
+@media(max-width:760px){
+  header .wrap{padding:0 18px;height:60px}
+  header .mark{font-size:34px;padding-top:4px}
+  /* Menü metinleri gidiyor, yalnızca dil ve mağaza kalıyor: dört öğe dar
+     ekranda üst üste biniyordu ve zaten hepsi sayfanın içinde tekrar var. */
+  header nav a{display:none}
+  header nav a[href^="https://apps.apple.com"]{display:inline-block;font-size:13px}
+  header nav{gap:14px}
+
+  .stage{min-height:0}
+  .stage-copy{padding:86px 0 34px}
+  .stage-copy .wrap{padding:0 22px}
+  .stage-copy h1{font-size:clamp(34px,10.5vw,52px)}
+  .stage-copy .lead{font-size:16px;margin:18px 0 26px}
+  .stage-media{height:70svh}
+  .badge img{height:46px}
+
+  section{padding:56px 0}
+  .wrap{padding:0 22px}
+  h2{font-size:clamp(25px,6.6vw,34px)}
+
+  .ticker div{font-size:16px;animation-duration:34s}
+  .ticker span{padding:0 18px}
+
+  .pin-inner{padding:52px 22px}
+  .pin-step h3{font-size:clamp(25px,7vw,34px)}
+  .scene{gap:10px}
+  .scene .card{border-radius:12px}
+
+  .rail{padding:64px 0 56px}
+  .rail-track{gap:12px;padding:0 22px}
+  .card{flex-basis:70vw}
+
+  .figures{padding:64px 0}
+  .quote{padding:74px 0}
+  .close{padding:86px 22px}
+  footer .wrap{flex-direction:column;align-items:flex-start;gap:20px}
+  footer a{margin-right:16px}
+}
+
+/* Dar ekranda beliriş mesafesi kısalıyor: parmakla hızlı kaydırırken uzun
+   yollu animasyon içeriği geciktiriyor. */
+@media(max-width:760px){
+  .rise{transform:translateY(26px);transition-duration:.6s}
+}
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -415,6 +471,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization",
 "name":"Bride Studio","url":"https://bridestudio.app/","logo":"https://bridestudio.app/assets/icon-512.png",
 "sameAs":["https://www.instagram.com/bridestudioapp","https://www.tiktok.com/@bridestudioapp","https://tr.pinterest.com/bridestudioai/"]}</script>
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
