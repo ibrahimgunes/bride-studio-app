@@ -154,19 +154,34 @@ header nav a:hover{color:var(--gold)}
 .tf-legend span{color:rgba(255,255,255,.34);transition:color .4s ease}
 .tf-legend .on{color:var(--gold)}
 
-/* Kare: iki görsel üst üste, üstteki opaklığı ilerlemeye bağlı. */
+/* Denklem: yüz + ham gelinlik = çıktı.
+   Önce yalnızca öncesi/sonrası vardı ve ortadaki şey — elbisenin kendisi —
+   görünmüyordu. Oysa anlatmak istediğimiz tam olarak o: kadının fotoğrafı ile
+   terzi kalıbındaki gelinlik birleşiyor. İki küçük girdi üstte, büyük sonuç
+   altta; ilerledikçe girdiler soluyor, sonuç doluyor. */
+.tf-inputs{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.tf-in{flex:1;min-width:0;border-radius:14px;overflow:hidden;background:#221b18;aspect-ratio:1;position:relative}
+.tf-in img{width:100%;height:100%;object-fit:cover}
+.tf-in::after{content:"";position:absolute;inset:0;background:var(--dark);opacity:calc(var(--p) * .55)}
+.tf-plus{flex:0 0 auto;font-family:var(--serif);font-size:26px;color:var(--gold);opacity:.85}
+.tf-cap{display:flex;gap:14px;margin-bottom:26px;font:600 9.5px/1 var(--sans);
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+.tf-cap span{flex:1}
+.tf-cap span:nth-child(2){flex:0 0 26px}
+
 .tf-frame{position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;background:#221b18;
   box-shadow:0 40px 90px rgba(0,0,0,.45)}
 .tf-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.tf-frame .b{transform:scale(calc(1 + var(--p) * .06));filter:saturate(calc(1 - var(--p) * .4))}
-.tf-frame .a{opacity:var(--p);transform:scale(calc(1.06 - var(--p) * .06))}
-/* Altın çizgi kareyi baştan sona tarıyor: dönüşümün nerede olduğunu söyleyen
-   ve gözü kareye bağlayan şey bu. */
+/* Sonuç doldukça beliriyor; altındaki gelinlik karesi ona zemin oluyor. */
+.tf-frame .b{transform:scale(calc(1.02 - var(--p) * .02));filter:saturate(calc(1 - var(--p) * .5)) blur(calc((1 - var(--p)) * 3px))}
+.tf-frame .a{opacity:var(--p);transform:scale(calc(1.05 - var(--p) * .05))}
 .tf-frame .sweep{position:absolute;left:0;right:0;height:2px;top:calc(var(--p) * 100%);
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
   opacity:calc(1 - abs(var(--p) - .5) * 1.6);box-shadow:0 0 26px 6px rgba(189,153,115,.35)}
 .tf-frame .glow{position:absolute;inset:0;background:radial-gradient(120% 60% at 50% calc(var(--p) * 100%),
   rgba(189,153,115,.22),transparent 60%);opacity:calc(1 - abs(var(--p) - .5) * 1.6)}
+.tf-out{margin-top:12px;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);opacity:var(--p)}
 
 /* Üç kadın: hangisinin gösterildiğini seçen küçük kareler. */
 .tf-pick{display:flex;gap:10px;margin-top:22px}
@@ -343,10 +358,6 @@ footer a:hover{color:#fff}
           swapped for a model — what you see is the photograph she uploaded, in
           a dress she has not tried on yet.
         </p>
-        <div class="tf-legend">
-          <span id="lgA" class="on">Her photo</span>
-          <span id="lgB">In the gown</span>
-        </div>
         <div class="tf-pick" id="tfPick">
           <button class="on" data-i="1" aria-label="First example"><img src="assets/img/tf1-before.jpg" alt=""></button>
           <button data-i="2" aria-label="Second example"><img src="assets/img/tf2-before.jpg" alt=""></button>
@@ -354,11 +365,21 @@ footer a:hover{color:#fff}
         </div>
       </div>
 
-      <div class="tf-frame" id="tfFrame" style="--p:0">
-        <img class="b" id="tfB" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded">
-        <img class="a" id="tfA" src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown">
-        <div class="glow"></div>
-        <div class="sweep"></div>
+      <div id="tfFrame" style="--p:0">
+        <div class="tf-inputs">
+          <div class="tf-in"><img id="tfFace" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></div>
+          <div class="tf-plus">+</div>
+          <div class="tf-in"><img id="tfDress" src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></div>
+        </div>
+        <div class="tf-cap"><span>Her photo</span><span></span><span>The gown</span></div>
+
+        <div class="tf-frame">
+          <img class="b" id="tfB" src="assets/img/tf1-dress.jpg" alt="">
+          <img class="a" id="tfA" src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown">
+          <div class="glow"></div>
+          <div class="sweep"></div>
+        </div>
+        <div class="tf-out">Her, in the gown</div>
       </div>
     </div>
   </div>
@@ -464,7 +485,6 @@ footer a:hover{color:#fff}
   // temposunda bakabilmesi, otomatik oynayan bir geçişten daha ikna edici.
   var tf = document.getElementById('tf');
   var tfFrame = document.getElementById('tfFrame');
-  var lgA = document.getElementById('lgA'), lgB = document.getElementById('lgB');
   function tfFrameUpdate(){
     if (!tf || !tfFrame) return;
     var r = tf.getBoundingClientRect();
@@ -475,8 +495,6 @@ footer a:hover{color:#fff}
     // dönüşüm başlamıyor, bitince de bir an duruyor.
     var e = Math.min(Math.max((p - .18) / .58, 0), 1);
     tfFrame.style.setProperty('--p', e.toFixed(3));
-    if (lgA) lgA.classList.toggle('on', e < .5);
-    if (lgB) lgB.classList.toggle('on', e >= .5);
   }
 
   var pick = document.getElementById('tfPick');
@@ -484,8 +502,10 @@ footer a:hover{color:#fff}
     pick.addEventListener('click', function(e){
       var b = e.target.closest('button'); if (!b) return;
       var i = b.dataset.i;
-      document.getElementById('tfB').src = 'assets/img/tf' + i + '-before.jpg';
-      document.getElementById('tfA').src = 'assets/img/tf' + i + '-after.jpg';
+      document.getElementById('tfFace').src  = 'assets/img/tf' + i + '-before.jpg';
+      document.getElementById('tfDress').src = 'assets/img/tf' + i + '-dress.jpg';
+      document.getElementById('tfB').src     = 'assets/img/tf' + i + '-dress.jpg';
+      document.getElementById('tfA').src     = 'assets/img/tf' + i + '-after.jpg';
       Array.prototype.forEach.call(pick.children, function(c){ c.classList.toggle('on', c === b); });
     });
   }
