@@ -113,8 +113,8 @@ header nav a:hover{color:var(--gold)}
 
 /* ── 1. Perde ──────────────────────────────────────────────────────────── */
 .stage{position:relative;height:100svh;min-height:620px;overflow:hidden;background:var(--dark)}
-.stage-bg{position:absolute;inset:-14% 0;will-change:transform}
-.stage-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;opacity:.82}
+.stage-bg{position:absolute;inset:-8% 0;will-change:transform}
+.stage-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;opacity:.82}
 .stage::after{content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(20,16,14,.7) 0%,rgba(20,16,14,.25) 38%,rgba(20,16,14,.88) 100%)}
 .stage-copy{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;
@@ -278,6 +278,7 @@ footer a:hover{color:#fff}
 
 
 
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -398,6 +399,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
 <link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
 <link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 </head>
 <body>
 
@@ -414,7 +427,7 @@ header nav .lang-menu a.on{color:var(--gold)}
 
 <section class="stage" id="top">
   <div class="stage-bg" id="stageBg">
-    <img src="assets/img/D0234.jpg" alt="A bride in a classic mikado ballgown" fetchpriority="high">
+    <img src="/assets/img/D0247.jpg" alt="A bride in a classic mikado ballgown" fetchpriority="high">
   </div>
   <div class="stage-copy">
     <div class="wrap">
@@ -456,9 +469,9 @@ header nav .lang-menu a.on{color:var(--gold)}
       </article>
     </div>
     <div class="scene" id="scene">
-      <figure class="card face"><img src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></figure>
-      <figure class="card dress"><img src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></figure>
-      <figure class="card result"><img src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown"></figure>
+      <figure class="card face"><img src="/assets/img/tf1-before.jpg" alt="The photograph she uploaded"></figure>
+      <figure class="card dress"><img src="/assets/img/tf1-dress.jpg" alt="The gown on a dress form"></figure>
+      <figure class="card result"><img src="/assets/img/tf1-after.jpg" alt="The same woman wearing the gown"></figure>
       <div class="flash"></div>
       <div class="cap" id="sceneCap">उसकी फ़ोटो</div>
     </div>
@@ -485,18 +498,18 @@ header nav .lang-menu a.on{color:var(--gold)}
   </div>
 
   <div class="rail-track" id="rail">
-    <div class="card"><figure><img src="assets/img/D0234.jpg" alt="Classic mikado ballgown with an illusion neckline" loading="lazy"></figure><div class="ref">D0234</div><h4>Classic Mikado Ballgown</h4><p>Illusion neckline</p></div>
-    <div class="card"><figure><img src="assets/img/D0220.jpg" alt="Bohemian lace mermaid with a V-neckline" loading="lazy"></figure><div class="ref">D0220</div><h4>Bohemian Lace Mermaid</h4><p>V-neckline</p></div>
-    <div class="card"><figure><img src="assets/img/D0247.jpg" alt="Classic mikado ballgown with a halter neckline" loading="lazy"></figure><div class="ref">D0247</div><h4>Classic Mikado Ballgown</h4><p>Halter</p></div>
-    <div class="card"><figure><img src="assets/img/D0218.jpg" alt="Minimalist crepe mermaid with a V-neckline" loading="lazy"></figure><div class="ref">D0218</div><h4>Minimalist Crepe Mermaid</h4><p>V-neckline</p></div>
-    <div class="card"><figure><img src="assets/img/D0233.jpg" alt="Romantic tulle ballgown with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0233</div><h4>Romantic Tulle Ballgown</h4><p>Sweetheart</p></div>
-    <div class="card"><figure><img src="assets/img/D0272.jpg" alt="Minimalist mikado A-line with a V-neckline" loading="lazy"></figure><div class="ref">D0272</div><h4>Minimalist Mikado A-line</h4><p>V-neckline</p></div>
-    <div class="card"><figure><img src="assets/img/D0230.jpg" alt="Bohemian lace sheath with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0230</div><h4>Bohemian Lace Sheath</h4><p>Sweetheart</p></div>
-    <div class="card"><figure><img src="assets/img/D0264.jpg" alt="Classic mikado ballgown with a square neckline" loading="lazy"></figure><div class="ref">D0264</div><h4>Classic Mikado Ballgown</h4><p>Square neckline</p></div>
-    <div class="card"><figure><img src="assets/img/D0206.jpg" alt="Bohemian chiffon sheath, off the shoulder" loading="lazy"></figure><div class="ref">D0206</div><h4>Bohemian Chiffon Sheath</h4><p>Off-the-shoulder</p></div>
-    <div class="card"><figure><img src="assets/img/D0221.jpg" alt="Classic organza ballgown with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0221</div><h4>Classic Organza Ballgown</h4><p>Sweetheart</p></div>
-    <div class="card"><figure><img src="assets/img/D0214.jpg" alt="Romantic crepe mermaid, off the shoulder" loading="lazy"></figure><div class="ref">D0214</div><h4>Romantic Crepe Mermaid</h4><p>Off-the-shoulder</p></div>
-    <div class="card"><figure><img src="assets/img/D0246.jpg" alt="Bohemian chiffon A-line with a V-neckline" loading="lazy"></figure><div class="ref">D0246</div><h4>Bohemian Chiffon A-line</h4><p>V-neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0234.jpg" alt="Classic mikado ballgown with an illusion neckline" loading="lazy"></figure><div class="ref">D0234</div><h4>Classic Mikado Ballgown</h4><p>Illusion neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0220.jpg" alt="Bohemian lace mermaid with a V-neckline" loading="lazy"></figure><div class="ref">D0220</div><h4>Bohemian Lace Mermaid</h4><p>V-neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0247.jpg" alt="Classic mikado ballgown with a halter neckline" loading="lazy"></figure><div class="ref">D0247</div><h4>Classic Mikado Ballgown</h4><p>Halter</p></div>
+    <div class="card"><figure><img src="/assets/img/D0218.jpg" alt="Minimalist crepe mermaid with a V-neckline" loading="lazy"></figure><div class="ref">D0218</div><h4>Minimalist Crepe Mermaid</h4><p>V-neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0233.jpg" alt="Romantic tulle ballgown with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0233</div><h4>Romantic Tulle Ballgown</h4><p>Sweetheart</p></div>
+    <div class="card"><figure><img src="/assets/img/D0272.jpg" alt="Minimalist mikado A-line with a V-neckline" loading="lazy"></figure><div class="ref">D0272</div><h4>Minimalist Mikado A-line</h4><p>V-neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0230.jpg" alt="Bohemian lace sheath with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0230</div><h4>Bohemian Lace Sheath</h4><p>Sweetheart</p></div>
+    <div class="card"><figure><img src="/assets/img/D0264.jpg" alt="Classic mikado ballgown with a square neckline" loading="lazy"></figure><div class="ref">D0264</div><h4>Classic Mikado Ballgown</h4><p>Square neckline</p></div>
+    <div class="card"><figure><img src="/assets/img/D0206.jpg" alt="Bohemian chiffon sheath, off the shoulder" loading="lazy"></figure><div class="ref">D0206</div><h4>Bohemian Chiffon Sheath</h4><p>Off-the-shoulder</p></div>
+    <div class="card"><figure><img src="/assets/img/D0221.jpg" alt="Classic organza ballgown with a sweetheart neckline" loading="lazy"></figure><div class="ref">D0221</div><h4>Classic Organza Ballgown</h4><p>Sweetheart</p></div>
+    <div class="card"><figure><img src="/assets/img/D0214.jpg" alt="Romantic crepe mermaid, off the shoulder" loading="lazy"></figure><div class="ref">D0214</div><h4>Romantic Crepe Mermaid</h4><p>Off-the-shoulder</p></div>
+    <div class="card"><figure><img src="/assets/img/D0246.jpg" alt="Bohemian chiffon A-line with a V-neckline" loading="lazy"></figure><div class="ref">D0246</div><h4>Bohemian Chiffon A-line</h4><p>V-neckline</p></div>
   </div>
 </section>
 
@@ -519,7 +532,7 @@ header nav .lang-menu a.on{color:var(--gold)}
 </section>
 
 <section class="close">
-  <div class="close-bg"><img src="assets/img/D0272.jpg" alt="" aria-hidden="true" loading="lazy"></div>
+  <div class="close-bg"><img src="/assets/img/D0272.jpg" alt="" aria-hidden="true" loading="lazy"></div>
   <div class="wrap rise">
     <h2>आज रात अपना पहला गाउन आज़माएँ।</h2>
     <p>बस एक फ़ोटो चाहिए। न कुछ भरना है, न साइन अप करना है।</p>
