@@ -154,38 +154,61 @@ header nav a:hover{color:var(--gold)}
 .tf-legend span{color:rgba(255,255,255,.34);transition:color .4s ease}
 .tf-legend .on{color:var(--gold)}
 
-/* Denklem: yüz + ham gelinlik = çıktı.
-   Önce yalnızca öncesi/sonrası vardı ve ortadaki şey — elbisenin kendisi —
-   görünmüyordu. Oysa anlatmak istediğimiz tam olarak o: kadının fotoğrafı ile
-   terzi kalıbındaki gelinlik birleşiyor. İki küçük girdi üstte, büyük sonuç
-   altta; ilerledikçe girdiler soluyor, sonuç doluyor. */
-/* Sağ sütun ekran yüksekliğinden hesaplanıyor, sütun genişliğinden değil.
-   Önceki hâli genişliğe göre kare çiziyordu ve sonuç ekrandan taşıp üstten
-   kırpılıyordu — sabitlenen bir bölümde içerik ekrana sığmak zorunda. */
-.tf-col{display:flex;flex-direction:column;height:min(82svh,760px);gap:10px}
-.tf-inputs{display:flex;align-items:center;gap:12px;flex:0 0 auto;height:22%}
-.tf-in{flex:1;min-width:0;height:100%;border-radius:12px;overflow:hidden;background:#221b18;position:relative}
-.tf-in img{width:100%;height:100%;object-fit:cover}
-.tf-in::after{content:"";position:absolute;inset:0;background:var(--dark);opacity:calc(var(--p) * .55)}
-.tf-plus{flex:0 0 auto;font-family:var(--serif);font-size:26px;color:var(--gold);opacity:.85}
-.tf-cap{display:flex;gap:12px;font:600 9.5px/1 var(--sans);
-  letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38)}
-.tf-cap span{flex:1}
-.tf-cap span:nth-child(2){flex:0 0 26px}
+/* Birleşme — üç kart, 3B derinlikte.
+   Üç görseli yan yana dizmek denklemi anlatıyordu ama olayı göstermiyordu:
+   üç ayrı fotoğraf duruyordu, birleşen bir şey yoktu.
+   Şimdi sahnenin bir derinliği var. Kadının fotoğrafı solda, gelinlik sağda,
+   ikisi de kameraya dönük değil — açılı duruyorlar ve uzakta. Kaydırdıkça
+   ortaya süzülüp düzleşiyorlar, üst üste biniyorlar ve yerlerini sonuca
+   bırakıyorlar. Model dosyası yok, WebGL yok: derinlik `perspective` ile,
+   yani sayfa hâlâ tek dosya ve telefonda anında açılıyor. */
+.tf-scene{position:relative;height:min(78svh,720px);perspective:1400px;perspective-origin:50% 45%}
+.tf-card{position:absolute;top:50%;left:50%;width:clamp(180px,26vw,300px);aspect-ratio:3/4;
+  border-radius:16px;overflow:hidden;background:#221b18;box-shadow:0 30px 70px rgba(0,0,0,.5);
+  transform-style:preserve-3d;will-change:transform,opacity}
+.tf-card img{width:100%;height:100%;object-fit:cover}
+.tf-card::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)}
 
-.tf-frame{position:relative;flex:1 1 auto;min-height:0;border-radius:20px;overflow:hidden;background:#221b18;
-  box-shadow:0 30px 70px rgba(0,0,0,.45)}
-.tf-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-/* Sonuç doldukça beliriyor; altındaki gelinlik karesi ona zemin oluyor. */
-.tf-frame .b{transform:scale(calc(1.02 - var(--p) * .02));filter:saturate(calc(1 - var(--p) * .5)) blur(calc((1 - var(--p)) * 1.5px))}
-.tf-frame .a{opacity:var(--p);transform:scale(calc(1.05 - var(--p) * .05))}
-.tf-frame .sweep{position:absolute;left:0;right:0;height:2px;top:calc(var(--p) * 100%);
+/* Yüz solda ve uzakta; ilerledikçe ortaya gelip düzleşiyor ve soluyor. */
+.tf-face{
+  transform:
+    translate(-50%,-50%)
+    translate3d(calc(-32% + var(--p) * 32%), calc(-6% + var(--p) * 6%), calc(-260px + var(--p) * 260px))
+    rotateY(calc(26deg - var(--p) * 26deg))
+    rotateZ(calc(-5deg + var(--p) * 5deg));
+  opacity:calc(1 - var(--p) * .85);
+}
+/* Gelinlik sağda, aynı yolu ters yönden. */
+.tf-dress{
+  transform:
+    translate(-50%,-50%)
+    translate3d(calc(32% - var(--p) * 32%), calc(8% - var(--p) * 8%), calc(-180px + var(--p) * 180px))
+    rotateY(calc(-24deg + var(--p) * 24deg))
+    rotateZ(calc(5deg - var(--p) * 5deg));
+  opacity:calc(1 - var(--p) * .85);
+}
+/* Sonuç ortada bekliyor: uzakta, küçük ve görünmez. İkisi üstüne kapandıkça
+   büyüyerek öne çıkıyor ve sahneyi devralıyor. */
+.tf-result{
+  width:clamp(230px,34vw,400px);
+  transform:
+    translate(-50%,-50%)
+    translate3d(0,0,calc(-420px + var(--p) * 460px))
+    rotateY(calc(-8deg + var(--p) * 8deg));
+  opacity:calc(var(--p) * var(--p));
+  box-shadow:0 50px 110px rgba(0,0,0,.6);
+}
+/* Birleşme anında ortadan geçen altın parıltı. */
+.tf-flash{position:absolute;top:50%;left:50%;width:min(70vw,560px);height:2px;
+  transform:translate(-50%,-50%) scaleX(calc(.4 + var(--p) * .6));
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:calc(1 - abs(var(--p) - .5) * 1.6);box-shadow:0 0 26px 6px rgba(189,153,115,.35)}
-.tf-frame .glow{position:absolute;inset:0;background:radial-gradient(120% 60% at 50% calc(var(--p) * 100%),
-  rgba(189,153,115,.22),transparent 60%);opacity:calc(1 - abs(var(--p) - .5) * 1.6)}
-.tf-out{flex:0 0 auto;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
-  color:var(--gold);opacity:var(--p)}
+  opacity:calc(1 - abs(var(--p) - .55) * 3.4);
+  box-shadow:0 0 40px 10px rgba(189,153,115,.4);pointer-events:none}
+
+.tf-labels{display:flex;gap:22px;margin-top:26px;font:600 10px/1 var(--sans);
+  letter-spacing:.16em;text-transform:uppercase}
+.tf-labels span{color:rgba(255,255,255,.34);transition:color .45s ease}
+.tf-labels .on{color:var(--gold)}
 
 /* Üç kadın: hangisinin gösterildiğini seçen küçük kareler. */
 .tf-pick{display:flex;gap:10px;margin-top:22px}
@@ -372,21 +395,18 @@ footer a:hover{color:#fff}
         </div>
       </div>
 
-      <div id="tfFrame" class="tf-col" style="--p:0">
-        <div class="tf-inputs">
-          <div class="tf-in"><img id="tfFace" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></div>
-          <div class="tf-plus">+</div>
-          <div class="tf-in"><img id="tfDress" src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></div>
+      <div id="tfFrame" style="--p:0">
+        <div class="tf-scene">
+          <div class="tf-card tf-face"><img id="tfFace" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></div>
+          <div class="tf-card tf-dress"><img id="tfDress" src="assets/img/tf1-dress.jpg" alt="The gown on a dress form"></div>
+          <div class="tf-card tf-result"><img id="tfA" src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown"></div>
+          <div class="tf-flash"></div>
         </div>
-        <div class="tf-cap"><span>Her photo</span><span></span><span>The gown</span></div>
-
-        <div class="tf-frame">
-          <img class="b" id="tfB" src="assets/img/tf1-dress.jpg" alt="">
-          <img class="a" id="tfA" src="assets/img/tf1-after.jpg" alt="The same woman wearing the gown">
-          <div class="glow"></div>
-          <div class="sweep"></div>
+        <div class="tf-labels">
+          <span id="lg1" class="on">Her photo</span>
+          <span id="lg2" class="on">The gown</span>
+          <span id="lg3">Her, wearing it</span>
         </div>
-        <div class="tf-out">Her, in the gown</div>
       </div>
     </div>
   </div>
@@ -502,6 +522,10 @@ footer a:hover{color:#fff}
     // dönüşüm başlamıyor, bitince de bir an duruyor.
     var e = Math.min(Math.max((p - .18) / .58, 0), 1);
     tfFrame.style.setProperty('--p', e.toFixed(3));
+    var l1=document.getElementById('lg1'), l3=document.getElementById('lg3');
+    if(l1) l1.classList.toggle('on', e < .6);
+    if(document.getElementById('lg2')) document.getElementById('lg2').classList.toggle('on', e < .6);
+    if(l3) l3.classList.toggle('on', e >= .6);
   }
 
   var pick = document.getElementById('tfPick');
@@ -511,7 +535,6 @@ footer a:hover{color:#fff}
       var i = b.dataset.i;
       document.getElementById('tfFace').src  = 'assets/img/tf' + i + '-before.jpg';
       document.getElementById('tfDress').src = 'assets/img/tf' + i + '-dress.jpg';
-      document.getElementById('tfB').src     = 'assets/img/tf' + i + '-dress.jpg';
       document.getElementById('tfA').src     = 'assets/img/tf' + i + '-after.jpg';
       Array.prototype.forEach.call(pick.children, function(c){ c.classList.toggle('on', c === b); });
     });
