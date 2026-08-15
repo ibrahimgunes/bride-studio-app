@@ -96,6 +96,16 @@ header.solid nav a{color:var(--taupe)}
 header nav a:hover{color:var(--gold)}
 @media(max-width:680px){header nav a{margin-left:15px;font-size:12.5px}}
 
+
+/* App Store rozeti — Apple'ın kendi çizimi.
+   Kendi düğmemizi çizmek serbest değil: mağaza kuralları bu bağlantı için
+   Apple'ın verdiği görselin kullanılmasını istiyor, ve ziyaretçi de onu
+   tanıyor — tanıdık bir rozet, yazıyla yazılmış bir düğmeden daha çabuk
+   okunuyor. Yükseklik Apple'ın en küçük ölçüsünün üstünde. */
+.badge{display:inline-block;line-height:0}
+.badge img{height:54px;width:auto}
+.badge:hover img{opacity:.9}
+@media(max-width:640px){.badge img{height:48px}}
 .btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;
   font:500 15px/1 var(--sans);letter-spacing:.01em;transition:transform .25s cubic-bezier(.2,.8,.3,1),box-shadow .25s ease}
 .btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(20,16,14,.22)}
@@ -267,6 +277,7 @@ footer a:hover{color:#fff}
 
 
 
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -375,6 +386,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
 <link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
 <link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 </head>
 <body>
 
@@ -401,7 +424,7 @@ header nav .lang-menu a.on{color:var(--gold)}
       <p class="lead fade-up">
         Sube una foto. Bride Studio te muestra con el vestido — tu cara, tu tono de piel, tu figura. No una modelo del catálogo. Tú.
       </p>
-      <a class="btn btn-light fade-up" href="https://apps.apple.com/app/id6741838118">Descargar en App Store</a>
+      <a class="badge fade-up" href="https://apps.apple.com/app/id6741838118"><img src="/assets/appstore-badge.svg" alt="Descargar en App Store" height="54"></a>
     </div>
   </div>
   <div class="scroll-cue">Desliza<i></i></div>
@@ -500,7 +523,7 @@ header nav .lang-menu a.on{color:var(--gold)}
   <div class="wrap rise">
     <h2>Pruébate tu primer vestido esta noche.</h2>
     <p>Basta con una foto. Nada que rellenar, nada que registrar.</p>
-    <a class="btn btn-light" href="https://apps.apple.com/app/id6741838118">Descargar en App Store</a>
+    <a class="badge" href="https://apps.apple.com/app/id6741838118"><img src="/assets/appstore-badge.svg" alt="Descargar en App Store" height="54"></a>
   </div>
 </section>
 

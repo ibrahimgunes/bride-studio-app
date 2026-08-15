@@ -274,7 +274,7 @@ def index_page(dresses, lang, paths):
   <h1 class=page-title>{esc(ui[0])}</h1>
   <div class=grid>{''.join(cards)}</div>
 </main>
-<footer><a href="{APPSTORE}">{esc(ui[8])}</a>
+<footer><a class=badge href="{APPSTORE}"><img src="{SITE}/assets/appstore-badge.svg" alt="Download on the App Store" height="46"></a>
 <span class=social><a href="https://www.instagram.com/bridestudioapp" rel="me">Instagram</a>
 <a href="https://www.tiktok.com/@bridestudioapp" rel="me">TikTok</a>
 <a href="https://tr.pinterest.com/bridestudioai/" rel="me">Pinterest</a></span></footer>
@@ -303,6 +303,8 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec .r{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--hair)}
 .spec dt{font:600 11px/1.6 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--taupe);margin:0}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
+.badge{display:inline-block;line-height:0}
+.badge img{height:46px;width:auto}
 .btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
 header nav{display:flex;align-items:center;gap:18px}
 .lang{position:relative;font-size:13px}

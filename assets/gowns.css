@@ -20,6 +20,8 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec .r{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--hair)}
 .spec dt{font:600 11px/1.6 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--taupe);margin:0}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
+.badge{display:inline-block;line-height:0}
+.badge img{height:46px;width:auto}
 .btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
 header nav{display:flex;align-items:center;gap:18px}
 .lang{position:relative;font-size:13px}
