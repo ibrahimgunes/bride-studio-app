@@ -80,7 +80,18 @@ img{display:block;max-width:100%}
    gelinlik beyaz, oda beyaz. Çözüm çubuğu boyamak değil, **menüyü** kendi
    zeminine oturtmak: bulanık açık bir hap, altındaki kareyi kapatmadan
    yazıyı okunur kılıyor. */
-header{position:fixed;top:0;left:0;right:0;z-index:60}
+header{position:fixed;top:0;left:0;right:0;z-index:60;
+  transition:background .35s ease,box-shadow .35s ease}
+
+/* Perdeyi geçince çubuk zemin alıyor ve her şey koyulaşıyor.
+   Perdenin içindeyken logo krem yarının, menü ise fotoğrafın üstünde duruyor —
+   biri koyu biri beyaz olmak zorunda. Aşağıya inildiğinde ikisi de aynı zemine
+   düşüyor ve bu ayrım anlamsızlaşıyor: menü beyaz kalırsa krem bölümlerde
+   kayboluyor, logo koyu kalırsa koyu bölümlerde. Tek zemin, tek renk. */
+header.solid{background:rgba(250,247,244,.92);backdrop-filter:saturate(180%) blur(14px);
+  box-shadow:0 1px 0 var(--hair)}
+header.solid .mark{color:var(--ink)}
+header.solid nav a,header.solid nav .lang summary{color:var(--ink);text-shadow:none}
 /* Tek satır, hap yok, beyaz yazı.
    Zemin vermek fotoğraftan yer alıyordu; beyaz yazı ise gelinliğin üstünde
    tek başına kayboluyor. Aradaki çözüm gölge: harflerin altına ince ve koyu
@@ -382,6 +393,7 @@ footer a:hover{color:#fff}
 
 
 
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -478,6 +490,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization",
 "name":"Bride Studio","url":"https://bridestudio.app/","logo":"https://bridestudio.app/assets/icon-512.png",
 "sameAs":["https://www.instagram.com/bridestudioapp","https://www.tiktok.com/@bridestudioapp","https://tr.pinterest.com/bridestudioai/"]}</script>
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
@@ -799,6 +823,7 @@ header nav .lang-menu a.on{color:var(--gold)}
 
   function frame(){
     var y = window.scrollY;
+    bar.classList.toggle('solid', y > innerHeight * 0.72);
 
     // Üst çubuk perde bitince koyu zeminden krem zemine geçiyor.
 
