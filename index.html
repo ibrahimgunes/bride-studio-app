@@ -124,6 +124,32 @@
   footer a { font-size: 14px; color: var(--taupe); text-decoration: none; margin-right: 20px; }
   footer a:hover { color: var(--ink); }
   .fine { font-size: 12.5px; color: var(--taupe); }
+
+  /* Hareket — sunum katmanı, içerik değil.
+     Metin HTML'de hazır duruyor ve JavaScript çalışmasa da okunuyor; buradaki
+     her şey yalnızca onun nasıl belirdiğini değiştiriyor. Arama motorunun
+     gördüğü sayfa bu satırlardan etkilenmiyor, ki sitenin varlık sebebi o. */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal[data-d="1"] { transition-delay: .08s; }
+  .reveal[data-d="2"] { transition-delay: .16s; }
+  .reveal[data-d="3"] { transition-delay: .24s; }
+
+  /* Kaydırmaya bağlı derinlik: hero karesi metinden yavaş kayıyor, iki katman
+     arasında mesafe hissi doğuyor. Dönüşüm yalnızca `transform`, yani her kare
+     GPU'da çiziliyor ve sayfa akıcı kalıyor. */
+  .parallax { will-change: transform; }
+
+  .gallery figure { transition: transform .5s cubic-bezier(.2,.7,.3,1); }
+  .gallery figure:hover { transform: translateY(-6px); }
+
+  /* Hareketi kapatmış cihazlarda hiçbir şey oynamıyor ve her şey görünür
+     kalıyor — açılış animasyonu içeriği gizleyen bir şeye dönüşmemeli. */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal.in { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .parallax { transform: none !important; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
@@ -141,7 +167,7 @@
 
 <div class="wrap hero">
   <div class="hero-grid">
-    <div>
+    <div class="reveal">
       <p class="eyebrow">Wedding dress try-on</p>
       <div class="rule"></div>
       <h1>See yourself in the gown before you ever put one on.</h1>
@@ -152,8 +178,8 @@
       <a class="btn" href="https://apps.apple.com/app/id6741838118">Download on the App Store</a>
       <p class="hero-note">Free to try · iPhone and iPad</p>
     </div>
-    <div class="shot-frame">
-      <img class="shot" src="assets/img/D0233.jpg" alt="A bride wearing a romantic tulle ballgown with a sweetheart neckline">
+    <div class="shot-frame reveal" data-d="1">
+      <img class="shot parallax" src="assets/img/D0233.jpg" alt="A bride wearing a romantic tulle ballgown with a sweetheart neckline">
     </div>
   </div>
 </div>
@@ -164,7 +190,7 @@
   <h2>Three taps, under a minute.</h2>
   <p class="sub">No forms, no sign-up, no measuring tape.</p>
 
-  <div class="steps">
+  <div class="steps reveal">
     <div class="step">
       <div class="num">01</div>
       <h3>Choose a photo</h3>
@@ -195,7 +221,7 @@
     know what you are looking at — and what to ask for when you walk into the boutique.
   </p>
 
-  <div class="gallery">
+  <div class="gallery reveal">
     <figure>
       <img src="assets/img/D0234.jpg" alt="Classic mikado ballgown with an illusion neckline" loading="lazy">
       <figcaption>Classic Mikado Ballgown · illusion neckline</figcaption>
@@ -224,7 +250,7 @@
 </section>
 
 <section class="wrap tight">
-  <div class="panel">
+  <div class="panel reveal">
     <div class="facts">
       <div><div class="n">150+</div><div class="l">gowns to try on</div></div>
       <div><div class="n">11</div><div class="l">languages</div></div>
@@ -245,7 +271,7 @@
 </section>
 
 <section class="wrap">
-  <div class="cta">
+  <div class="cta reveal">
     <h2>Try your first gown tonight.</h2>
     <p>One photo is all it takes. Nothing to fill in, nothing to sign up for.</p>
     <a class="btn" href="https://apps.apple.com/app/id6741838118">Download on the App Store</a>
@@ -267,5 +293,39 @@
   </div>
 </footer>
 
+
+<script>
+// Bölümler göründükçe açılıyor. `IntersectionObserver` kaydırma olayına
+// bağlanmaktan ucuz: tarayıcı kesişmeyi kendisi hesaplıyor, biz her karede
+// ölçüm yapmıyoruz.
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var items = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  items.forEach(function (el) { io.observe(el); });
+
+  // Hero karesi metinden yavaş kayıyor. Okuma `requestAnimationFrame` içinde
+  // yapılıyor ki kaydırma olayı düzeni yeniden hesaplatmasın.
+  var hero = document.querySelector('.parallax');
+  if (!hero) return;
+  var ticking = false;
+  function frame() {
+    var y = window.scrollY;
+    if (y < 900) hero.style.transform = 'translate3d(0,' + (y * 0.06) + 'px,0)';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(frame); }
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
