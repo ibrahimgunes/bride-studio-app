@@ -8,9 +8,15 @@ h1,h2{font-family:"New York",ui-serif,Georgia,serif;font-weight:400;line-height:
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding:22px 30px;border-bottom:1px solid var(--hair)}
-/* Aynı işaret, aynı sebeple. Bu sayfalar krem zeminde, yani koyu kesim. */
-.mark{display:block;width:126px;height:32px;font-size:0;
-  background:url(/assets/logo-dark.png) left center/contain no-repeat}
+
+/* Markanın kendi yazı tipi.
+   Logo bugüne kadar PNG'ydi; canlı yazı olarak her ekranda net çıkıyor,
+   büyütülünce bozulmuyor ve arama motoru markayı metin olarak okuyor.
+   Yalnızca imza için: el yazısı bir kesim, cümlelerde okunmaz. */
+@font-face{font-family:"Million Astteroids";
+  src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
+  font-display:swap;font-weight:400}
+.mark{font-family:"Million Astteroids",var(--serif);font-size:28px;line-height:1;color:var(--ink)}
 .back{font-size:14px;color:var(--taupe)}
 main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}

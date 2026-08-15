@@ -23,6 +23,14 @@
    Renkler uygulamanın `AppTheme.swift` dosyasından birebir: site ile uygulama
    arasındaki renk farkı, ikisinin ayrı şeyler olduğu izlenimi veriyor.
    ───────────────────────────────────────────────────────────────────────── */
+
+/* Markanın kendi yazı tipi.
+   Logo bugüne kadar PNG'ydi; canlı yazı olarak her ekranda net çıkıyor,
+   büyütülünce bozulmuyor ve arama motoru markayı metin olarak okuyor.
+   Yalnızca imza için: el yazısı bir kesim, cümlelerde okunmaz. */
+@font-face{font-family:"Million Astteroids";
+  src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
+  font-display:swap;font-weight:400}
 :root{
   --cream:#FAF7F4; --ink:#3C3732; --taupe:#A58E7C; --gold:#BD9973;
   --dark:#14100E; --hair:rgba(165,142,124,.22);
@@ -75,10 +83,9 @@ header .wrap{display:flex;align-items:center;justify-content:space-between;heigh
    görünür bağ tam da bu işaret, ve iki farklı ses çıkarıyorlardı.
    İki kesim var, biri koyu biri açık zemin için — uygulama da bunları böyle
    ayırıyor: üst çubukta beyaz, ayarlarda siyah. */
-header .mark{display:block;width:132px;height:34px;font-size:0;
-  background:url(/assets/logo-light.png) left center/contain no-repeat;
-  transition:background-image .4s ease}
-header.solid .mark{background-image:url(/assets/logo-dark.png)}
+header .mark{font-family:"Million Astteroids",var(--serif);font-size:30px;line-height:1;
+  color:#fff;transition:color .4s ease;padding-top:4px}
+header.solid .mark{color:var(--ink)}
 header nav a{margin-left:26px;font-size:14px;color:rgba(255,255,255,.72);transition:color .4s ease}
 header.solid{background:rgba(250,247,244,.9);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--hair)}
 header.solid .mark{color:var(--ink)}
@@ -245,6 +252,7 @@ footer a:hover{color:#fff}
 
 
 
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -266,6 +274,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#FAF7F4">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
