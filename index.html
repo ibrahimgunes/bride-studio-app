@@ -233,6 +233,15 @@ header nav a:hover{color:var(--gold)}
 .close h2{font-size:clamp(34px,5.6vw,72px)}
 .close p{color:rgba(255,255,255,.72);max-width:30em;margin:22px auto 36px}
 
+
+/* Sosyal hesaplar.
+   Adları yazıyla: üç ikon yan yana koymak her sitede aynı görünüyor ve
+   hangisinin ne olduğunu okumak için ikonu tanımak gerekiyor. Ad okunuyor,
+   ve künye diliyle — bu sayfada numara ve ölçü de aynı sesle yazılı. */
+.social{display:flex;gap:22px;flex-wrap:wrap}
+.social a{font:400 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);transition:color .3s ease}
+.social a:hover{color:var(--gold)}
 footer{background:var(--dark);color:rgba(255,255,255,.5);padding:40px 0 60px;border-top:1px solid rgba(255,255,255,.09)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
 footer a{font-size:14px;color:rgba(255,255,255,.6);margin-right:22px}
@@ -252,6 +261,7 @@ footer a:hover{color:#fff}
   .word span{transform:none!important}
   html{scroll-behavior:auto}
 }
+
 
 
 
@@ -338,6 +348,21 @@ header nav .lang-menu a.on{color:var(--gold)}
 <link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
 <link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
 <link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization",
+"name":"Bride Studio","url":"https://bridestudio.app/","logo":"https://bridestudio.app/assets/icon-512.png",
+"sameAs":["https://www.instagram.com/bridestudioapp","https://www.tiktok.com/@bridestudioapp","https://tr.pinterest.com/bridestudioai/"]}</script>
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
@@ -487,10 +512,15 @@ header nav .lang-menu a.on{color:var(--gold)}
 <footer>
   <div class="wrap">
     <div>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="support.html">Support</a>
-      <a href="faq.html">FAQ</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/support.html">Support</a>
+      <a href="/faq.html">FAQ</a>
+      <div class="social" style="margin-top:16px">
+        <a href="https://www.instagram.com/bridestudioapp" rel="me noopener" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@bridestudioapp" rel="me noopener" target="_blank">TikTok</a>
+        <a href="https://tr.pinterest.com/bridestudioai/" rel="me noopener" target="_blank">Pinterest</a>
+      </div>
     </div>
     <div class="fine">
       Results are AI visualisations, not photographs of a real fitting.<br>

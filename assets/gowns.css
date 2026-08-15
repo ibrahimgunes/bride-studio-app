@@ -8,15 +8,7 @@ h1,h2{font-family:"New York",ui-serif,Georgia,serif;font-weight:400;line-height:
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding:22px 30px;border-bottom:1px solid var(--hair)}
-
-/* Markanın kendi yazı tipi.
-   Logo bugüne kadar PNG'ydi; canlı yazı olarak her ekranda net çıkıyor,
-   büyütülünce bozulmuyor ve arama motoru markayı metin olarak okuyor.
-   Yalnızca imza için: el yazısı bir kesim, cümlelerde okunmaz. */
-@font-face{font-family:"Million Astteroids";
-  src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
-  font-display:swap;font-weight:400}
-.mark{font-family:"Million Astteroids",var(--serif);font-size:38px;line-height:1;color:var(--ink)}
+.mark{font-family:"New York",ui-serif,Georgia,serif;font-size:20px}
 .back{font-size:14px;color:var(--taupe)}
 main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
@@ -38,9 +30,12 @@ header nav{display:flex;align-items:center;gap:18px}
 .lang-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;background:#fff;
   border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:170px;
   box-shadow:0 18px 40px rgba(60,55,50,.14);display:grid;gap:2px}
-header nav .lang-menu a{display:block;padding:9px 12px;border-radius:9px;font-size:14px;color:var(--ink);opacity:1}
+.lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;color:var(--ink)}
 .lang-menu a:hover{background:var(--cream)}
 .lang-menu a.on{color:var(--gold)}
+.social{display:flex;gap:18px}
+.social a{font:400 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--taupe)}
+.social a:hover{color:var(--gold)}
 footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;color:var(--taupe);font-size:13px}
 .grid-wrap{display:block}
 .page-title{font-size:clamp(30px,4vw,52px);margin-bottom:34px}

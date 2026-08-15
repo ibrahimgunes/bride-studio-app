@@ -274,7 +274,10 @@ def index_page(dresses, lang, paths):
   <h1 class=page-title>{esc(ui[0])}</h1>
   <div class=grid>{''.join(cards)}</div>
 </main>
-<footer><a href="{APPSTORE}">{esc(ui[8])}</a></footer>
+<footer><a href="{APPSTORE}">{esc(ui[8])}</a>
+<span class=social><a href="https://www.instagram.com/bridestudioapp" rel="me">Instagram</a>
+<a href="https://www.tiktok.com/@bridestudioapp" rel="me">TikTok</a>
+<a href="https://tr.pinterest.com/bridestudioai/" rel="me">Pinterest</a></span></footer>
 </body></html>"""
 
 
@@ -313,6 +316,9 @@ header nav{display:flex;align-items:center;gap:18px}
 .lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;color:var(--ink)}
 .lang-menu a:hover{background:var(--cream)}
 .lang-menu a.on{color:var(--gold)}
+.social{display:flex;gap:18px}
+.social a{font:400 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--taupe)}
+.social a:hover{color:var(--gold)}
 footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;color:var(--taupe);font-size:13px}
 .grid-wrap{display:block}
 .page-title{font-size:clamp(30px,4vw,52px);margin-bottom:34px}
