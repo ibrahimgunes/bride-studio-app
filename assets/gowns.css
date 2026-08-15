@@ -16,7 +16,7 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 @font-face{font-family:"Million Astteroids";
   src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
   font-display:swap;font-weight:400}
-.mark{font-family:"Million Astteroids",var(--serif);font-size:28px;line-height:1;color:var(--ink)}
+.mark{font-family:"Million Astteroids",var(--serif);font-size:38px;line-height:1;color:var(--ink)}
 .back{font-size:14px;color:var(--taupe)}
 main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
