@@ -306,8 +306,17 @@ def main():
     a = ap.parse_args()
 
     src = (ROOT / "index.html").read_text()
-    if ".lang-menu" not in src:
-        src = src.replace("</style>", LANG_CSS + "</style>", 1)
+
+    # Şablon her seferinde temizleniyor.
+    #
+    # `index.html` hem İngilizce sayfa hem şablon, yani betik çıktıyı kendi
+    # girdisinin üstüne yazıyor. İkinci çalıştırmada bu, bir önceki turda
+    # eklenen dil seçicinin üstüne bir tane daha koydu — ekranda iki menü
+    # belirdi — ve CSS'i "zaten var" sanıp güncellemedi, yani düzeltme hiç
+    # ulaşmadı. Önce eskisi sökülüyor, sonra yenisi konuyor.
+    src = re.sub(r'<details class="lang">.*?</details>', "", src, flags=re.S)
+    src = re.sub(r"\n/\* Dil menüsü\..*?\.lang-menu a\.on\{[^}]*\}\n", "\n", src, flags=re.S)
+    src = src.replace("</style>", LANG_CSS + "</style>", 1)
 
     print(f"{len(COPY)} metin, {len(LANGS)} dil")
     if not a.apply:

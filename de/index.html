@@ -234,22 +234,40 @@ footer a:hover{color:#fff}
   html{scroll-behavior:auto}
 }
 
-.lang{position:relative;font-size:13px;margin-left:22px}
-.lang summary{list-style:none;cursor:pointer;color:inherit;opacity:.8;padding:5px 11px;
-  border:1px solid currentColor;border-radius:999px}
-.lang summary::-webkit-details-marker{display:none}
-.lang summary::after{content:" ▾";opacity:.6}
-.lang-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:80;background:#fff;color:var(--ink);
-  border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:172px;
-  box-shadow:0 20px 44px rgba(0,0,0,.22);display:grid;gap:2px}
-.lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;margin:0}
-.lang-menu a:hover{background:var(--cream)}
-.lang-menu a.on{color:var(--gold)}
+
+/* Dil menüsü.
+   Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
+   bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
+   ilk hâlinde beyaz zemine beyaz yazı düştü ve menü okunmaz oldu. */
+header nav .lang{position:relative;font-size:13px;margin-left:22px}
+header nav .lang summary{list-style:none;cursor:pointer;color:inherit;opacity:.85;
+  padding:5px 12px;border:1px solid currentColor;border-radius:999px}
+header nav .lang summary::-webkit-details-marker{display:none}
+header nav .lang summary::after{content:" ▾";opacity:.6}
+header nav .lang-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:80;
+  background:#fff;border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:180px;
+  box-shadow:0 20px 44px rgba(0,0,0,.24);display:grid;gap:2px}
+header nav .lang-menu a{display:block;margin:0;padding:9px 12px;border-radius:9px;
+  font-size:14px;color:var(--ink);opacity:1}
+header nav .lang-menu a:hover{background:var(--cream);color:var(--ink)}
+header nav .lang-menu a.on{color:var(--gold)}
 </style>
 <link rel="icon" href="/assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#FAF7F4">
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
@@ -284,7 +302,7 @@ footer a:hover{color:#fff}
       <a href="#how">So funktioniert es</a>
       <a href="https://bridestudio.app/gowns/">Kleider</a>
       <a href="https://apps.apple.com/app/id6741838118">App holen</a>
-    <details class="lang"><summary>English</summary><div class="lang-menu"><a href="https://bridestudio.app/" class=on>English</a><a href="https://bridestudio.app/tr/">Türkçe</a><a href="https://bridestudio.app/de/">Deutsch</a><a href="https://bridestudio.app/es/">Español</a><a href="https://bridestudio.app/fr/">Français</a><a href="https://bridestudio.app/it/">Italiano</a><a href="https://bridestudio.app/pt/">Português</a><a href="https://bridestudio.app/ja/">日本語</a><a href="https://bridestudio.app/ko/">한국어</a><a href="https://bridestudio.app/zh/">简体中文</a><a href="https://bridestudio.app/hi/">हिन्दी</a></div></details><details class="lang"><summary>Deutsch</summary><div class="lang-menu"><a href="https://bridestudio.app/">English</a><a href="https://bridestudio.app/tr/">Türkçe</a><a href="https://bridestudio.app/de/" class=on>Deutsch</a><a href="https://bridestudio.app/es/">Español</a><a href="https://bridestudio.app/fr/">Français</a><a href="https://bridestudio.app/it/">Italiano</a><a href="https://bridestudio.app/pt/">Português</a><a href="https://bridestudio.app/ja/">日本語</a><a href="https://bridestudio.app/ko/">한국어</a><a href="https://bridestudio.app/zh/">简体中文</a><a href="https://bridestudio.app/hi/">हिन्दी</a></div></details></nav>
+    <details class="lang"><summary>Deutsch</summary><div class="lang-menu"><a href="https://bridestudio.app/">English</a><a href="https://bridestudio.app/tr/">Türkçe</a><a href="https://bridestudio.app/de/" class=on>Deutsch</a><a href="https://bridestudio.app/es/">Español</a><a href="https://bridestudio.app/fr/">Français</a><a href="https://bridestudio.app/it/">Italiano</a><a href="https://bridestudio.app/pt/">Português</a><a href="https://bridestudio.app/ja/">日本語</a><a href="https://bridestudio.app/ko/">한국어</a><a href="https://bridestudio.app/zh/">简体中文</a><a href="https://bridestudio.app/hi/">हिन्दी</a></div></details></nav>
   </div>
 </header>
 
