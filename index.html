@@ -159,28 +159,32 @@ header nav a:hover{color:var(--gold)}
    görünmüyordu. Oysa anlatmak istediğimiz tam olarak o: kadının fotoğrafı ile
    terzi kalıbındaki gelinlik birleşiyor. İki küçük girdi üstte, büyük sonuç
    altta; ilerledikçe girdiler soluyor, sonuç doluyor. */
-.tf-inputs{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.tf-in{flex:1;min-width:0;border-radius:14px;overflow:hidden;background:#221b18;aspect-ratio:1;position:relative}
+/* Sağ sütun ekran yüksekliğinden hesaplanıyor, sütun genişliğinden değil.
+   Önceki hâli genişliğe göre kare çiziyordu ve sonuç ekrandan taşıp üstten
+   kırpılıyordu — sabitlenen bir bölümde içerik ekrana sığmak zorunda. */
+.tf-col{display:flex;flex-direction:column;height:min(82svh,760px);gap:10px}
+.tf-inputs{display:flex;align-items:center;gap:12px;flex:0 0 auto;height:22%}
+.tf-in{flex:1;min-width:0;height:100%;border-radius:12px;overflow:hidden;background:#221b18;position:relative}
 .tf-in img{width:100%;height:100%;object-fit:cover}
 .tf-in::after{content:"";position:absolute;inset:0;background:var(--dark);opacity:calc(var(--p) * .55)}
 .tf-plus{flex:0 0 auto;font-family:var(--serif);font-size:26px;color:var(--gold);opacity:.85}
-.tf-cap{display:flex;gap:14px;margin-bottom:26px;font:600 9.5px/1 var(--sans);
+.tf-cap{display:flex;gap:12px;font:600 9.5px/1 var(--sans);
   letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38)}
 .tf-cap span{flex:1}
 .tf-cap span:nth-child(2){flex:0 0 26px}
 
-.tf-frame{position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;background:#221b18;
-  box-shadow:0 40px 90px rgba(0,0,0,.45)}
+.tf-frame{position:relative;flex:1 1 auto;min-height:0;border-radius:20px;overflow:hidden;background:#221b18;
+  box-shadow:0 30px 70px rgba(0,0,0,.45)}
 .tf-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* Sonuç doldukça beliriyor; altındaki gelinlik karesi ona zemin oluyor. */
-.tf-frame .b{transform:scale(calc(1.02 - var(--p) * .02));filter:saturate(calc(1 - var(--p) * .5)) blur(calc((1 - var(--p)) * 3px))}
+.tf-frame .b{transform:scale(calc(1.02 - var(--p) * .02));filter:saturate(calc(1 - var(--p) * .5)) blur(calc((1 - var(--p)) * 1.5px))}
 .tf-frame .a{opacity:var(--p);transform:scale(calc(1.05 - var(--p) * .05))}
 .tf-frame .sweep{position:absolute;left:0;right:0;height:2px;top:calc(var(--p) * 100%);
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
   opacity:calc(1 - abs(var(--p) - .5) * 1.6);box-shadow:0 0 26px 6px rgba(189,153,115,.35)}
 .tf-frame .glow{position:absolute;inset:0;background:radial-gradient(120% 60% at 50% calc(var(--p) * 100%),
   rgba(189,153,115,.22),transparent 60%);opacity:calc(1 - abs(var(--p) - .5) * 1.6)}
-.tf-out{margin-top:12px;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+.tf-out{flex:0 0 auto;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold);opacity:var(--p)}
 
 /* Üç kadın: hangisinin gösterildiğini seçen küçük kareler. */
@@ -191,8 +195,11 @@ header nav a:hover{color:var(--gold)}
 .tf-pick img{width:100%;height:100%;object-fit:cover}
 .tf-spacer{height:220svh}
 @media(max-width:900px){
-  .tf-stick{position:relative;height:auto;padding:80px 0}
-  .tf-grid{grid-template-columns:1fr;gap:30px}
+  .tf-stick{position:relative;height:auto;padding:70px 0}
+  .tf-grid{grid-template-columns:1fr;gap:26px}
+  .tf-col{height:auto}
+  .tf-inputs{height:120px}
+  .tf-frame{aspect-ratio:1;flex:0 0 auto}
   .tf-spacer{display:none}
 }
 
@@ -365,7 +372,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
 
-      <div id="tfFrame" style="--p:0">
+      <div id="tfFrame" class="tf-col" style="--p:0">
         <div class="tf-inputs">
           <div class="tf-in"><img id="tfFace" src="assets/img/tf1-before.jpg" alt="The photograph she uploaded"></div>
           <div class="tf-plus">+</div>
