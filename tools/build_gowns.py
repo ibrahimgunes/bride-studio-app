@@ -60,6 +60,14 @@ UI = {
     "hi": ("वेडिंग ड्रेस", "खुद पर आज़माएँ", "कपड़ा", "नेकलाइन", "सिल्हूट", "लंबाई", "डिटेल", "पूरा कलेक्शन देखें", "App Store से डाउनलोड करें"),
 }
 
+# Dilin kendi adı, İngilizcesi değil: menüde "Türkçe" arayan biri "Turkish"
+# yazısını taramıyor.
+LANG_NAMES = {
+    "en": "English", "tr": "Türkçe", "de": "Deutsch", "es": "Español",
+    "fr": "Français", "it": "Italiano", "pt-BR": "Português", "ja": "日本語",
+    "ko": "한국어", "zh-Hans": "简体中文", "hi": "हिन्दी",
+}
+
 APPSTORE = "https://apps.apple.com/app/id6741838118"
 
 
@@ -177,6 +185,24 @@ def esc(s):
              .replace(">", "&gt;").replace('"', "&quot;"))
 
 
+def lang_picker(current, url_for):
+    """Aynı sayfanın öteki dilleri.
+
+    `hreflang` etiketleri arama motoruna hangi dilin kime gösterileceğini
+    söylüyor ama insana bir şey söylemiyor: siteye giren biri kendi diline
+    geçemiyordu. Bağlantılar aynı gelinliğin öteki dildeki adresine gidiyor,
+    ana sayfaya değil — dil değiştirmek okuduğun şeyi kaybetmek olmamalı.
+
+    `<details>` ile: açılır menü için JavaScript gerekmiyor, ve betik
+    çalışmasa da menü çalışıyor.
+    """
+    items = "".join(
+        f'<a href="{url_for(l)}"{" class=on" if l == current else ""}>{LANG_NAMES[l]}</a>'
+        for l in LANGS)
+    return (f'<details class=lang><summary>{LANG_NAMES[current]}</summary>'
+            f'<div class=lang-menu>{items}</div></details>')
+
+
 def gown_page(d, lang, path_map):
     code = LANGS[lang]
     ui = UI[lang]
@@ -209,7 +235,8 @@ def gown_page(d, lang, path_map):
     return f"""{head(lang, esc(title) + " — Bride Studio", esc(desc), canonical, alternates, img)}
 <script type="application/ld+json">{ld}</script>
 <header><a class=mark href="{home}">Bride Studio</a>
-<a class=back href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[0])}</a></header>
+<nav><a class=back href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[0])}</a>
+{lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/{path_map[l]}/")}</nav></header>
 <main>
   <figure><img src="{img}" alt="{esc(title)}" width="1000" height="1000"></figure>
   <div class=info>
@@ -241,7 +268,8 @@ def index_page(dresses, lang, paths):
             f'<img src="{SITE}/assets/gowns/{d["id"]}.jpg" alt="{esc(t)}" loading="lazy" width="1000" height="1000">'
             f'<h2>{esc(t)}</h2></a>')
     return f"""{head(lang, esc(ui[0]) + " — Bride Studio", esc(ui[0]), canonical, alternates, f"{SITE}/assets/gowns/{dresses[0]['id']}.jpg")}
-<header><a class=mark href="{SITE}/{code + '/' if code else ''}">Bride Studio</a></header>
+<header><a class=mark href="{SITE}/{code + '/' if code else ''}">Bride Studio</a>
+<nav>{lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/")}</nav></header>
 <main class=grid-wrap>
   <h1 class=page-title>{esc(ui[0])}</h1>
   <div class=grid>{''.join(cards)}</div>
@@ -273,6 +301,18 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec dt{font:600 11px/1.6 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--taupe);margin:0}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
 .btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
+header nav{display:flex;align-items:center;gap:18px}
+.lang{position:relative;font-size:13px}
+.lang summary{list-style:none;cursor:pointer;color:var(--taupe);padding:6px 10px;border:1px solid var(--hair);border-radius:999px}
+.lang summary::-webkit-details-marker{display:none}
+.lang summary::after{content:" ▾";opacity:.6}
+.lang[open] summary{color:var(--ink)}
+.lang-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;background:#fff;
+  border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:170px;
+  box-shadow:0 18px 40px rgba(60,55,50,.14);display:grid;gap:2px}
+.lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;color:var(--ink)}
+.lang-menu a:hover{background:var(--cream)}
+.lang-menu a.on{color:var(--gold)}
 footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;color:var(--taupe);font-size:13px}
 .grid-wrap{display:block}
 .page-title{font-size:clamp(30px,4vw,52px);margin-bottom:34px}

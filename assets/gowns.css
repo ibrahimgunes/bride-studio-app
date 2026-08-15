@@ -21,6 +21,18 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec dt{font:600 11px/1.6 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--taupe);margin:0}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
 .btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
+header nav{display:flex;align-items:center;gap:18px}
+.lang{position:relative;font-size:13px}
+.lang summary{list-style:none;cursor:pointer;color:var(--taupe);padding:6px 10px;border:1px solid var(--hair);border-radius:999px}
+.lang summary::-webkit-details-marker{display:none}
+.lang summary::after{content:" ▾";opacity:.6}
+.lang[open] summary{color:var(--ink)}
+.lang-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;background:#fff;
+  border:1px solid var(--hair);border-radius:14px;padding:8px;min-width:170px;
+  box-shadow:0 18px 40px rgba(60,55,50,.14);display:grid;gap:2px}
+.lang-menu a{display:block;padding:8px 12px;border-radius:9px;font-size:14px;color:var(--ink)}
+.lang-menu a:hover{background:var(--cream)}
+.lang-menu a.on{color:var(--gold)}
 footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;color:var(--taupe);font-size:13px}
 .grid-wrap{display:block}
 .page-title{font-size:clamp(30px,4vw,52px);margin-bottom:34px}
