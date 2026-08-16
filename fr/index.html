@@ -159,13 +159,13 @@ header nav a:hover::after{transform:scaleX(1)}
 .stage-media::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,var(--cream) 0%,transparent 12%)}
 
-/* Ekranın altında, tam ortada — perdenin tamamına ait olduğu için.
-   İki sütunun dikişine denk geliyor, o yüzden hem krem hem fotoğraf üstünde
-   okunması gerekiyor: yazı beyaz ve altında ince bir gölge var. */
+/* Ekranın altında, tam ortada. Beyazdı ve gölgeyle okunuyordu; koyu yazı hem
+   krem yarıda hem gelinliğin üstünde daha iyi tutuyor — gelinlik ve oda beyaz,
+   yani asıl kaybolan renk beyaz. */
 .scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:5;
-  text-align:center;color:#fff;text-shadow:0 1px 12px rgba(20,16,14,.5);
+  text-align:center;color:var(--ink);text-shadow:0 1px 10px rgba(250,247,244,.6);
   font:600 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase}
-.scroll-cue i{display:block;width:1px;height:34px;background:rgba(255,255,255,.6);margin:10px auto 0;
+.scroll-cue i{display:block;width:1px;height:34px;background:var(--ink);opacity:.45;margin:10px auto 0;
   transform-origin:top;animation:cue 2.1s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -394,6 +394,7 @@ footer a:hover{color:#fff}
 
 
 
+
 /* Dil menüsü.
    Renkler `header nav a`dan daha özgül yazılmak zorunda: üst çubuktaki
    bağlantılar koyu perdenin üstünde beyaz ve menü onların içinde yaşıyor —
@@ -490,6 +491,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization",
 "name":"Bride Studio","url":"https://bridestudio.app/","logo":"https://bridestudio.app/assets/icon-512.png",
 "sameAs":["https://www.instagram.com/bridestudioapp","https://www.tiktok.com/@bridestudioapp","https://tr.pinterest.com/bridestudioai/"]}</script>
+<link rel="alternate" hreflang="en" href="https://bridestudio.app/">
+<link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
+<link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
+<link rel="alternate" hreflang="es" href="https://bridestudio.app/es/">
+<link rel="alternate" hreflang="fr" href="https://bridestudio.app/fr/">
+<link rel="alternate" hreflang="it" href="https://bridestudio.app/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://bridestudio.app/pt/">
+<link rel="alternate" hreflang="ja" href="https://bridestudio.app/ja/">
+<link rel="alternate" hreflang="ko" href="https://bridestudio.app/ko/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bridestudio.app/zh/">
+<link rel="alternate" hreflang="hi" href="https://bridestudio.app/hi/">
+<link rel="alternate" hreflang="x-default" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="en" href="https://bridestudio.app/">
 <link rel="alternate" hreflang="tr" href="https://bridestudio.app/tr/">
 <link rel="alternate" hreflang="de" href="https://bridestudio.app/de/">
