@@ -23,10 +23,18 @@
 <meta property="og:image" content="https://bridestudio.app/assets/gowns/D0295.jpg">
 <meta property="og:type" content="product">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://bridestudio.app/assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="https://bridestudio.app/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="https://bridestudio.app/assets/gowns.css">
-<link rel="icon" href="/assets/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<meta name="theme-color" content="#FAF7F4">
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+var bsOK=null;try{bsOK=localStorage.getItem('bs-consent');}catch(e){}
+gtag('consent','default',{
+ 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
+ 'analytics_storage':bsOK==='yes'?'granted':'denied','wait_for_update':500});
+gtag('js',new Date());gtag('config','G-CGJLBG4684');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CGJLBG4684"></script>
 </head>
 <body>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Klasik Mikado Prenses kesim — Düşük omuz", "description": "Prenses kesimin sadeliği mikado dokusuyla buluşuyor, uzun bir siluet kuruyor. Düşük omuz tamamlıyor.", "image": "https://bridestudio.app/assets/gowns/D0295.jpg", "brand": {"@type": "Brand", "name": "Bride Studio"}, "category": "Ballgown"}</script>
@@ -52,4 +60,45 @@
   <a href="https://bridestudio.app/tr/gowns/">Koleksiyonun tamamı</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
 </footer>
+<div id=bs-consent hidden>
+  <p>Sitenin nasıl kullanıldığını görmek için çerez kullanıyoruz. Kabul etmezsen hiçbir şey saklanmıyor.</p>
+  <div class=bs-consent-actions>
+    <button type=button data-consent=no>İstemiyorum</button>
+    <button type=button data-consent=yes>Kabul et</button>
+  </div>
+</div>
+<style>
+#bs-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
+ max-width:660px;margin:0 auto;display:flex;gap:18px;align-items:center;
+ flex-wrap:wrap;justify-content:space-between;
+ background:#14100E;color:#FAF7F4;padding:18px 20px;border-radius:14px;
+ box-shadow:0 10px 40px rgba(0,0,0,.28);font-size:14px;line-height:1.45}
+#bs-consent[hidden]{display:none}
+#bs-consent p{margin:0;flex:1 1 300px;color:#FAF7F4}
+.bs-consent-actions{display:flex;gap:10px;flex:0 0 auto}
+#bs-consent button{font:inherit;cursor:pointer;padding:9px 18px;border-radius:999px;
+ border:1px solid #A58E7C;background:transparent;color:#FAF7F4;white-space:nowrap}
+#bs-consent button[data-consent=yes]{background:#BD9973;border-color:#BD9973;color:#14100E}
+#bs-consent button:focus-visible{outline:2px solid #FAF7F4;outline-offset:2px}
+@media (max-width:520px){
+ #bs-consent{flex-direction:column;align-items:stretch}
+ .bs-consent-actions{display:grid;grid-template-columns:1fr 1fr}
+ #bs-consent button{width:100%}
+}
+</style>
+<script>
+(function(){
+  var box=document.getElementById('bs-consent'),saved=null;
+  try{saved=localStorage.getItem('bs-consent');}catch(e){}
+  if(saved===null)box.hidden=false;
+  box.addEventListener('click',function(e){
+    var pick=e.target.getAttribute&&e.target.getAttribute('data-consent');
+    if(!pick)return;
+    try{localStorage.setItem('bs-consent',pick);}catch(e){}
+    if(window.gtag)gtag('consent','update',
+      {'analytics_storage':pick==='yes'?'granted':'denied'});
+    box.hidden=true;
+  });
+})();
+</script>
 </body></html>

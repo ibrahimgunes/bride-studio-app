@@ -23,6 +23,9 @@ değişiklikte bayatlıyor. Bu betik her seferinde baştan üretiyor.
 import json, subprocess, argparse, pathlib, re, shutil, sys, urllib.request
 import concurrent.futures as cf
 
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import consent
+
 try:
     from PIL import Image
 except ImportError:
@@ -32,6 +35,12 @@ PROJECT = "bridestudio-181c6"
 BUCKET = "bridestudio-181c6.firebasestorage.app"
 BASE = f"https://firestore.googleapis.com/v1/projects/{PROJECT}/databases/(default)/documents"
 SITE = "https://bridestudio.app"
+
+# GA4 ölçüm kimliği. Firebase projesinin kendi web akışı, yani uygulama ve site
+# aynı mülkte görünüyor — "kaç kişi siteye geldi" ile "kaç kişi indirdi" iki
+# ayrı panelde durmuyor. Pin bağlantıları `utm_source=pinterest` taşıyor, o
+# yüzden trafiğin kaynağı ve hangi gelinlikten geldiği burada okunabiliyor.
+GA = "G-CGJLBG4684"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 # Firestore'daki dil kodu → adres yolundaki kod.
@@ -156,6 +165,11 @@ def head(lang, title, desc, canonical, alternates, image):
     `hreflang` olmadan on bir dil birbirinin kopyası sayılıyor ve Google
     aralarından birini seçip diğerlerini indeksten düşürüyor — asıl kayıp
     orada olurdu.
+
+    Favicon etiketleri burada duruyor çünkü daha önce durmuyorlardı: yayındaki
+    sayfalara elle eklenmişlerdi ve bu betiğin her koşusu bin altı yüz sayfadan
+    hepsini birden siliyordu. Üretilen bir dosyaya elle dokunmak, bir sonraki
+    üretime kadar süren bir düzeltmedir.
     """
     alt = "\n".join(
         f'<link rel="alternate" hreflang="{h}" href="{u}">' for h, u in alternates
@@ -175,7 +189,10 @@ def head(lang, title, desc, canonical, alternates, image):
 <meta property="og:image" content="{image}">
 <meta property="og:type" content="product">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{SITE}/assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="{SITE}/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="{SITE}/assets/gowns.css">
+{consent.head_scripts(GA)}
 </head>
 <body>"""
 
@@ -252,6 +269,7 @@ def gown_page(d, lang, path_map):
   <a href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[7])}</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
 </footer>
+{consent.banner(lang)}
 </body></html>"""
 
 
@@ -278,6 +296,7 @@ def index_page(dresses, lang, paths):
 <span class=social><a href="https://www.instagram.com/bridestudioapp" rel="me">Instagram</a>
 <a href="https://www.tiktok.com/@bridestudioapp" rel="me">TikTok</a>
 <a href="https://tr.pinterest.com/bridestudioai/" rel="me">Pinterest</a></span></footer>
+{consent.banner(lang)}
 </body></html>"""
 
 

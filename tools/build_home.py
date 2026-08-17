@@ -12,7 +12,10 @@ metinleriyle aynı ağızdan konuşuyorlar.
     python3 tools/build_home.py            # ne yapacağını söyler
     python3 tools/build_home.py --apply
 """
-import argparse, pathlib, re
+import argparse, pathlib, re, sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import consent
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://bridestudio.app"
@@ -300,6 +303,18 @@ header nav .lang-menu a.on{color:var(--gold)}
 """
 
 
+def swap_consent(page, lang):
+    """Bandı sayfanın diline çevirir.
+
+    `index.html` hem İngilizce sayfa hem şablon, yani betik kendi çıktısının
+    üstüne yazıyor — dil menüsünde de olan şey. Eskisi **hepsi** sökülüyor,
+    sonra bir tane konuyor. İlk sürüm sökme sınırını bir `</script>` fazla
+    ilerletiyordu ve bandı silmek yerine ikinci bir tane bırakıyordu.
+    """
+    page = re.sub(r"<div id=bs-consent\b.*?</script>", "", page, flags=re.S)
+    return page.replace("</body>", consent.banner(lang) + "\n</body>", 1)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -324,7 +339,7 @@ def main():
         return
 
     for lang, code in LANGS.items():
-        page = build(lang, src)
+        page = swap_consent(build(lang, src), lang)
         if code:
             d = ROOT / code
             d.mkdir(exist_ok=True)
