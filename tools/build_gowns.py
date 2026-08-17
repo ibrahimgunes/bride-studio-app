@@ -25,6 +25,7 @@ import concurrent.futures as cf
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import consent
+import langhint
 
 try:
     from PIL import Image
@@ -194,7 +195,7 @@ def head(lang, title, desc, canonical, alternates, image):
 <link rel="stylesheet" href="{SITE}/assets/gowns.css">
 {consent.head_scripts(GA)}
 </head>
-<body>"""
+<body>{langhint.strip(lang)}"""
 
 
 def esc(s):

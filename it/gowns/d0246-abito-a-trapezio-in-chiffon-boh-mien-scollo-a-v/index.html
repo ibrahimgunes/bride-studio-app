@@ -36,7 +36,59 @@ gtag('js',new Date());gtag('config','G-CGJLBG4684');
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGJLBG4684"></script>
 </head>
-<body>
+<body><div id=bs-lang hidden><a href="#"></a><button type=button aria-label="close"></button></div>
+<style>
+#bs-lang{display:flex;gap:14px;align-items:center;justify-content:center;
+ background:#FAF7F4;border-bottom:1px solid rgba(60,55,50,.12);
+ padding:9px 16px;font-size:14px;color:#3C3732;position:relative;z-index:80}
+#bs-lang[hidden]{display:none}
+#bs-lang a{color:#3C3732;text-decoration:none;border-bottom:1px solid #BD9973;padding-bottom:1px}
+#bs-lang a:hover{color:#BD9973}
+#bs-lang button{font:inherit;cursor:pointer;background:none;border:0;color:#A58E7C;
+ padding:2px 6px;line-height:1}
+#bs-lang button:focus-visible,#bs-lang a:focus-visible{outline:2px solid #BD9973;outline-offset:2px}
+</style>
+<script>
+(function(){
+  var HINT={"en": "View this page in English", "tr": "Bu sayfayı Türkçe görüntüle", "de": "Diese Seite auf Deutsch ansehen", "es": "Ver esta página en español", "fr": "Voir cette page en français", "it": "Vedi questa pagina in italiano", "pt-BR": "Ver esta página em português", "ja": "このページを日本語で見る", "ko": "이 페이지를 한국어로 보기", "zh-Hans": "用简体中文查看此页", "hi": "इस पेज को हिन्दी में देखें"},CLOSE={"en": "Dismiss", "tr": "Kapat", "de": "Schließen", "es": "Cerrar", "fr": "Fermer", "it": "Chiudi", "pt-BR": "Fechar", "ja": "閉じる", "ko": "닫기", "zh-Hans": "关闭", "hi": "बंद करें"},here="it";
+  try{if(localStorage.getItem('bs-lang')==='off')return;}catch(e){}
+
+  // Tarayıcının istediği diller, sırayla. Ülke değil dil bakılıyor: Almanya'da
+  // yaşayan herkes Almanca okumuyor, ama telefonunu Almanca kullanan okuyor.
+  var want=(navigator.languages||[navigator.language||'']).map(function(s){
+    return String(s);
+  });
+
+  // Sayfanın kendi kardeşleri. Adresler dile göre farklı, o yüzden
+  // uydurulmuyor — etiketten okunuyor.
+  var alts={};
+  Array.prototype.forEach.call(
+    document.querySelectorAll('link[rel=alternate][hreflang]'),function(l){
+      alts[l.getAttribute('hreflang')]=l.getAttribute('href');
+  });
+
+  // İlk eşleşen dil. `de-AT` da `de`ye düşüyor; `zh` basitleştirilmiş sayılıyor.
+  var pick=null;
+  for(var i=0;i<want.length&&!pick;i++){
+    var w=want[i],base=w.split('-')[0].toLowerCase();
+    var cand=[w,base==='zh'?'zh-Hans':null,base==='pt'?'pt-BR':null,base];
+    for(var j=0;j<cand.length;j++){
+      var c=cand[j];
+      if(c&&alts[c]&&HINT[c]){pick=c;break;}
+    }
+  }
+  if(!pick||pick===here)return;
+
+  var box=document.getElementById('bs-lang'),a=box.querySelector('a'),b=box.querySelector('button');
+  a.href=alts[pick];a.textContent=HINT[pick];a.setAttribute('lang',pick);
+  b.textContent=CLOSE[pick]||CLOSE.en;
+  b.addEventListener('click',function(){
+    try{localStorage.setItem('bs-lang','off');}catch(e){}
+    box.hidden=true;
+  });
+  box.hidden=false;
+})();
+</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Abito a trapezio in chiffon, bohémien — scollo a V", "description": "Chiffon modellato in una linea a trapezio, di gusto bohémien. Lo completa uno scollo a V.", "image": "https://bridestudio.app/assets/gowns/D0246.jpg", "brand": {"@type": "Brand", "name": "Bride Studio"}, "category": "A-Line"}</script>
 <header><a class=mark href="https://bridestudio.app/it/">Bride Studio</a>
 <nav><a class=back href="https://bridestudio.app/it/gowns/">Abiti da sposa</a>

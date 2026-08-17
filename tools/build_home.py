@@ -16,6 +16,7 @@ import argparse, pathlib, re, sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import consent
+import langhint
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://bridestudio.app"
@@ -304,14 +305,17 @@ header nav .lang-menu a.on{color:var(--gold)}
 
 
 def swap_consent(page, lang):
-    """Bandı sayfanın diline çevirir.
+    """Bandı ve dil şeridini sayfanın diline çevirir.
 
     `index.html` hem İngilizce sayfa hem şablon, yani betik kendi çıktısının
-    üstüne yazıyor — dil menüsünde de olan şey. Eskisi **hepsi** sökülüyor,
-    sonra bir tane konuyor. İlk sürüm sökme sınırını bir `</script>` fazla
-    ilerletiyordu ve bandı silmek yerine ikinci bir tane bırakıyordu.
+    üstüne yazıyor — dil menüsünde de olan şey. İkisi de önce **tamamen**
+    sökülüyor, sonra bir tane konuyor. Sökme sınırını bir adım fazla
+    ilerletmek, bir keresinde bandı silmek yerine sayfanın tamamını ikinci kez
+    yazdırmıştı; o yüzden kesme tek bir tembel eşleşme.
     """
     page = re.sub(r"<div id=bs-consent\b.*?</script>", "", page, flags=re.S)
+    page = re.sub(r"<div id=bs-lang\b.*?</script>", "", page, flags=re.S)
+    page = page.replace("<body>", "<body>" + langhint.strip(lang), 1)
     return page.replace("</body>", consent.banner(lang) + "\n</body>", 1)
 
 
