@@ -245,37 +245,72 @@ def lang_picker(current, url_for):
             f'<div class=lang-menu>{items}</div></details>')
 
 
+# Dönüşümü başlatan betik.
+#
+# f-string'in dışında duruyor: JavaScript süslü parantez dolu ve gövdeye
+# doğrudan yazıldığında biçimlendiriciyi bozuyor. Sabit olarak durup tek bir
+# yer tutucuyla giriyor.
+REVEAL_JS = """<script>
+/* Gösteri, bölüm ekrana girdiğinde başlıyor.
+
+   Sayfa açılır açılmaz başlatmak, telefonda çoğu zaman kadın daha bakmadan
+   bitmesi demek — kaçırılan bir animasyon, hiç olmayanla aynı. Bir kez
+   oynuyor: tekrarlayan bir hareket bir süre sonra göze çarpmayı bırakıyor. */
+(function(){
+  var tf = document.querySelector('.tf');
+  if (!tf) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) { tf.classList.add('on'); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      tf.classList.add('on');
+      io.disconnect();
+    });
+  }, {threshold: 0.45});
+  io.observe(tf);
+})();
+</script>"""
+
+
 def equation_block(d, lang, img):
-    """Bir fotoğraf, bir gelinlik, ve sonucu — yan yana.
+    """Gelinlik terzi kalıbında duruyor; bir perde geçiyor; kadının üstünde.
 
-    Pinterest'ten gelen kadın ana sayfayı hiç görmüyor; doğrudan buraya
-    düşüyor, ve burada bugüne kadar yalnızca bitmiş bir kare vardı. Ne olduğu
-    ve kendisinin de yapabileceği hiçbir yerde yazmıyordu.
+    Pinterest'ten gelen kadın ana sayfayı hiç görmüyor, doğrudan buraya
+    düşüyor. Sayfa bitmiş bir vitrin karesiyle açılıyordu — tam da kadının az
+    önce kaydırıp geldiği şeyle, yani yeni hiçbir şey söylemeden.
 
-    Üç kare de gerçek ve bu gelinliğe ait: soldaki, bu vitrin karesini üreten
-    profilin kendi fotoğrafı; ortadaki gelinliğin terzi kalıbındaki hâli;
-    sağdaki ikisinin sonucu. Temsilî görsel yok.
+    Anlatılacak şey bir nesne değil bir olay: bu gelinlik giyilebilir. O yüzden
+    iki kare üst üste duruyor ve aralarından bir bant geçiyor. Perde, prova
+    kabininin kendi hareketi; jenerik bir çapraz geçiş değil.
 
-    Ham karesi olmayan gelinlikte bölüm hiç çıkmıyor — dördünde Storage'da yok,
-    ve kırık bir görsel, olmayan bir bölümden kötü.
+    Yüz köşede, küçük: kimin üstünde olduğunu söylüyor ve o kare bu vitrin
+    karesini gerçekten üreten profilin fotoğrafı. Temsilî görsel yok.
+
+    Ham karesi olmayan gelinlikte bölüm hiç çıkmıyor.
     """
     form = ROOT / "assets" / "forms" / f"{d['id']}.jpg"
     if not form.exists():
         return ""
     eq = EQUATION.get(lang, EQUATION["en"])
     model = MODEL_BY_DRESS.get(d["id"], "M1")
-    cell = lambda src, cap, extra="": (
-        f'<figure class="eq-cell{extra}"><img src="{src}" alt="{esc(cap)}" '
-        f'width="360" height="360" loading="lazy">'
-        f'<figcaption>{esc(cap)}</figcaption></figure>')
-    return f"""<section class="equation" aria-label="{esc(eq[0])} + {esc(eq[1])} = {esc(eq[2])}">
-  <div class="eq-inner">
-    {cell(f"/assets/models/{model}.jpg", eq[0])}
-    <div class="eq-op" aria-hidden="true">+</div>
-    {cell(f"/assets/forms/{d['id']}.jpg", eq[1])}
-    <div class="eq-op" aria-hidden="true">=</div>
-    {cell(img, eq[2], " eq-result")}
-  </div>
+    return f"""<section class="tf" aria-label="{esc(eq[1])} → {esc(eq[2])}">
+    <div class="tf-stage">
+      <img class="tf-form" src="/assets/forms/{d['id']}.jpg" alt="{esc(eq[1])}"
+        width="360" height="360">
+      <img class="tf-worn" src="{img}" alt="{esc(eq[2])}" width="1000" height="1000">
+      <span class="tf-veil" aria-hidden="true"></span>
+    </div>
+    <!-- Yüz ve ok — mağaza görselindeki düzenin aynısı.
+         Kareye binen yuvarlak bir madalyon ve ondan yüze uzanan kavisli beyaz
+         bir ok. Kutunun **dışında** duruyor: sol kenara taşıyor, içeride
+         olsaydı `overflow:hidden` onu keserdi — o kırpma perdenin çalışması
+         için gerekli. -->
+    <div class="tf-tag" aria-hidden="true">
+      <figure><img src="/assets/models/{model}.jpg" alt="" width="360" height="360"></figure>
+      <img class="tf-arrow" src="/assets/img/arrow.png" alt="" width="145" height="263">
+    </div>
+    <p class="tf-cap"><span data-a>{esc(eq[1])}</span><span data-b>{esc(eq[2])}</span></p>
 </section>"""
 
 
@@ -315,7 +350,7 @@ def gown_page(d, lang, path_map):
 <nav><a class=back href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[0])}</a>
 {lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/{path_map[l]}/")}</nav></header>
 <main>
-  <figure><img src="{img}" alt="{esc(title)}" width="1000" height="1000"></figure>
+  {equation}
   <div class=info>
     <p class=eyebrow>{esc(m.get('style',''))}</p>
     <h1>{esc(title)}</h1>
@@ -325,13 +360,11 @@ def gown_page(d, lang, path_map):
     <a class=btn href="{APPSTORE}">{esc(ui[1])}</a>
   </div>
 </main>
-
-{equation}
 <footer>
   <a href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[7])}</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
 </footer>
-{consent.banner(lang)}
+{REVEAL_JS}{consent.banner(lang)}
 </body></html>"""
 
 
@@ -383,43 +416,102 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 .mark{font-family:"Million Astteroids","New York",ui-serif,Georgia,serif;font-size:30px;line-height:1;padding-top:4px}
 .back{font-size:14px;color:var(--taupe)}
 
-/* ── Denklem ──────────────────────────────────────────────────────────────
-   Bir fotoğraf, bir gelinlik, ve ikisinin sonucu — yan yana, tek bakışta.
+/* ── Dönüşüm ──────────────────────────────────────────────────────────────
+   Gelinlik terzi kalıbında duruyor, bir perde geçiyor, kadının üstünde
+   kalıyor. Prova kabininin kendi hareketi.
 
-   Kaydırmaya bağlı değil. Ana sayfada bu hikâye sabitlenen bir bölümle
-   anlatılıyor ve orada doğru: ziyaretçi zaten aşağı iniyor. Burada ise kadın
-   Pinterest'ten tek bir gelinliğe bakmaya geldi; onu kaydırmaya zorlamak
-   yerine sayfa açılırken bir kez oynayıp duruyor.
+   İki kare aynı kutuda üst üste; üstteki `clip-path` ile soldan açılıyor.
+   Opaklıkla karıştırmak yerine kırpmak, iki fotoğrafın bir an bulanık bir
+   ortalamaya dönüşmesini engelliyor — perde nettir, çapraz geçiş değildir.
 
-   Sonuç karesi altınla çevrelenmiş: üçü eşit görünürse denklem bir sıralama
-   olur, oysa anlatılan şey soldakilerin sağdakine dönüşmesi. */
-.equation{background:var(--dark);color:#fff;padding:64px 30px 70px;margin-top:20px}
-.eq-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;
-  justify-content:center;gap:clamp(14px,3vw,42px);flex-wrap:wrap}
-.eq-cell{margin:0;text-align:center;width:clamp(120px,17vw,210px)}
-.eq-cell img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;background:#241d19;
-  opacity:0;transform:translateY(18px) scale(.97);
-  animation:eq-in .7s cubic-bezier(.16,.86,.26,1) forwards}
-.eq-cell:nth-child(1) img{animation-delay:.15s}
-.eq-cell:nth-child(3) img{animation-delay:.35s}
-.eq-result img{border:1px solid var(--gold);animation-delay:.62s}
-.eq-cell figcaption{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(255,255,255,.5);margin-top:14px}
-.eq-op{font:400 clamp(20px,2.4vw,30px)/1 "New York",ui-serif,Georgia,serif;
-  color:var(--gold);opacity:0;animation:eq-in .5s ease forwards;padding-bottom:26px}
-.eq-inner>.eq-op:nth-child(2){animation-delay:.3s}
-.eq-inner>.eq-op:nth-child(4){animation-delay:.55s}
-@keyframes eq-in{to{opacity:1;transform:none}}
-@media(max-width:620px){
-  .equation{padding:44px 20px 48px}
-  .eq-cell{width:clamp(96px,26vw,140px)}
-  .eq-cell figcaption{font-size:10.5px;letter-spacing:.1em}
-}
-/* Hareketi kapatmış olana hepsi birden, yerinde. */
+   Zemin koyu: anlatılan an bir prova kabini, ve beyaz bir gelinlik ancak
+   koyunun yanında beyaz görünüyor. */
+/* Solda dönüşüm, sağda gelinliğin künyesi — yan yana.
+   Alt alta dururken sayfa iki ekran boyu uzuyordu ve okunacak şeye ulaşmak
+   için kaydırmak gerekiyordu. Yan yana, ikisi de ilk bakışta görünüyor. */
+.tf{color:#fff;margin:0;position:relative;display:flex;flex-direction:column}
+.tf-stage{position:relative;width:100%;flex:1;min-height:clamp(340px,46vw,620px);
+  border-radius:18px;overflow:hidden;background:#241d19}
+.tf-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Kadın, perde geçtikçe açılıyor. Başlangıçta hiç görünmüyor. */
+.tf-worn{clip-path:inset(0 100% 0 0)}
+
+/* Perdenin kendisi: kenarında altın bir çizgi olan dar bir ışık bandı.
+   Görünürlüğü perdeyle birlikte gelip gidiyor, yoksa duran bir çizgi kalıyor. */
+.tf-veil{position:absolute;top:0;bottom:0;left:0;width:22%;opacity:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10) 55%,rgba(189,153,115,.85) 99%)}
+
+/* Yüz ve ok — mağaza görselindeki düzenin aynısı.
+   Yuvarlak madalyon karenin sol kenarına biniyor, sağında kadının yüzüne
+   bakan kavisli beyaz bir ok var.
+
+   İkisi yan yana akıyor, mutlak konumlandırmayla değil: ok bir denemede
+   madalyonun altına düşüp beyaz bir halka gibi durdu, çünkü yüzdelik `bottom`
+   değeri kutunun kendi yüksekliğine göre hesaplanıyordu. Sıralı düzende yer
+   tahmine kalmıyor. */
+.tf-tag{position:absolute;left:-3%;top:34%;z-index:3;pointer-events:none;
+  display:flex;align-items:flex-start;gap:clamp(4px,.8vw,9px);
+  opacity:0;transform:translate(-10px,6px) scale(.94)}
+.tf-tag figure{margin:0;width:clamp(62px,7vw,92px);flex:0 0 auto;
+  border-radius:50%;overflow:hidden;border:4px solid #fff;
+  box-shadow:0 10px 30px rgba(20,16,14,.42);line-height:0}
+/* Yalnızca madalyondaki yüz. Eskiden `.tf-tag img` idi ve kutudaki her
+   görseli yakalıyordu — ok da kare bir kutuya sıkıştırılıp kırpılıyordu, ve
+   `.tf-arrow` sınıfı bunu geri alamıyordu çünkü sınıf+eleman seçicisi daha
+   güçlü. Kapsamı daraltmak, özgüllük yarışını ortadan kaldırıyor. */
+.tf-tag figure img{position:static;width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.tf-arrow{width:clamp(22px,2.6vw,34px);height:auto;margin-top:-6px;
+  border:0;border-radius:0;box-shadow:none;
+  filter:drop-shadow(0 2px 6px rgba(20,16,14,.55))}
+
+.tf-cap{margin:14px 0 0;font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
+  position:relative;height:1.2em}
+.tf-cap span{position:absolute;left:0}
+.tf-cap [data-a]{color:var(--taupe)}
+.tf-cap [data-b]{color:var(--gold);opacity:0}
+
+/* Gösteri, bir kez. `.on` geldiğinde başlıyor — sayfa açılır açılmaz değil,
+   bölüm ekrana girince: üstte olsa bile kadın oraya bakıyor olmayabilir. */
+.tf.on .tf-worn{animation:tf-open 1.5s cubic-bezier(.62,.02,.24,1) .35s forwards}
+.tf.on .tf-veil{animation:tf-sweep 1.5s cubic-bezier(.62,.02,.24,1) .35s forwards}
+.tf.on .tf-tag{animation:tf-tag-in .65s cubic-bezier(.16,.86,.26,1) 1.5s forwards}
+.tf.on .tf-cap [data-a]{animation:tf-out .4s ease 1.1s forwards}
+.tf.on .tf-cap [data-b]{animation:tf-in .5s ease 1.35s forwards}
+
+@keyframes tf-open{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes tf-sweep{
+  0%{left:-22%;opacity:0}
+  8%{opacity:1}
+  92%{opacity:1}
+  100%{left:100%;opacity:0}}
+@keyframes tf-tag-in{to{opacity:1;transform:none}}
+@keyframes tf-in{to{opacity:1}}
+@keyframes tf-out{to{opacity:0}}
+
+/* Hareketi kapatmış olana bitmiş hâli: kadın gelinliğin içinde, yüz köşede. */
 @media(prefers-reduced-motion:reduce){
-  .eq-cell img,.eq-op{animation:none;opacity:1;transform:none}
+  .tf-worn{clip-path:none}
+  .tf-tag{opacity:1;transform:none}
+  .tf-veil{display:none}
+  .tf-cap [data-a]{opacity:0}
+  .tf-cap [data-b]{opacity:1}
 }
-main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+
+/* İki sütun: solda dönüşüm, sağda okunacaklar.
+   Büyük vitrin karesi buradan kalktı — aynı görsel hem dönüşümde hem burada
+   duruyordu. */
+main{max-width:1180px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(20px,4vw,30px);
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,60px);
+  /* İki sütun aynı yerde bitiyor. Kare bir görsel sağdaki künye ve düğmeden
+     kısa kalıyordu ve alt hizası tutmuyordu; kutu satırın boyunu alıp
+     fotoğrafı ona göre kırpıyor. */
+  align-items:stretch}
+@media(max-width:900px){
+  main{grid-template-columns:1fr;gap:26px}
+  .tf-stage{border-radius:14px;min-height:0;aspect-ratio:4/5}
+}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .eyebrow{font:600 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin:0 0 14px}
 .info h1{font-size:clamp(28px,3.6vw,44px)}
@@ -431,23 +523,28 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
 .badge{display:inline-block;line-height:0}
 .badge img{height:46px;width:auto}
-/* Tek eylem, ve üstünden geçen ışık.
-   Sayfadaki her şey bakılacak şey; bu ise yapılacak şey, ve düz koyu bir
-   kapsül olarak metnin arasında kayboluyordu. Parıltı altı saniyede bir
-   geçiyor — sürekli olan bir hareket göze çarpmayı bırakıyor, arada bir olan
-   çarpıyor. */
-.btn{position:relative;display:inline-block;padding:16px 34px;border-radius:999px;
-  background:var(--dark);color:#fff;font:500 15px/1 sans-serif;overflow:hidden;
-  box-shadow:0 0 0 0 rgba(189,153,115,.5);animation:btn-pulse 6s ease-in-out infinite}
+/* Tek eylem.
+   Siyah bir kapsüldü ve krem bir sayfada sert duruyordu — sayfadaki hiçbir
+   şey o kadar koyu değil. Altın, markanın kendi vurgusu ve zaten künye
+   çizgilerinde, yaka adında, dönüşümün çerçevesinde var; düğme onların dolu
+   hâli oluyor.
+
+   Sütunun tamamını kaplıyor: künye satırları kenardan kenara uzanıyordu,
+   düğme onların altında yarım kalıyordu ve hizasız görünüyordu. Telefonda da
+   parmak için doğru büyüklük. */
+.btn{position:relative;display:block;width:100%;text-align:center;
+  padding:20px 32px;border-radius:999px;overflow:hidden;
+  background:var(--gold);color:#fff;
+  font:400 19px/1 "New York",ui-serif,Georgia,serif;letter-spacing:.01em;
+  box-shadow:0 10px 26px rgba(189,153,115,.32);
+  transition:background .25s ease,box-shadow .25s ease,transform .25s ease}
 .btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.34),transparent);
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent);
   transform:skewX(-18deg);animation:btn-shine 6s ease-in-out infinite}
 @keyframes btn-shine{0%{left:-60%}18%{left:130%}100%{left:130%}}
-@keyframes btn-pulse{
-  0%,12%{box-shadow:0 0 0 0 rgba(189,153,115,.45)}
-  6%{box-shadow:0 0 0 12px rgba(189,153,115,0)}
-  100%{box-shadow:0 0 0 0 rgba(189,153,115,0)}}
-.btn:hover{background:var(--gold)}
+.btn:hover{background:var(--dark);box-shadow:0 12px 30px rgba(20,16,14,.28);transform:translateY(-1px)}
+.btn:focus-visible{outline:2px solid var(--dark);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.btn::after{display:none}.btn{transition:none}}
 @media(prefers-reduced-motion:reduce){
   .btn,.btn::after{animation:none}
   .btn::after{display:none}
@@ -473,7 +570,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px soli
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .grid .card img{border-radius:14px;background:#efe9e3}
 .grid .card h2{font-size:15px;margin-top:12px}
-@media(max-width:900px){main{grid-template-columns:1fr;gap:30px;padding:34px 22px}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
 """
 
 

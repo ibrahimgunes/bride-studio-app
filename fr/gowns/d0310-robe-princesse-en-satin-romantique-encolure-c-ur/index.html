@@ -94,7 +94,24 @@ gtag('js',new Date());gtag('config','G-CGJLBG4684');
 <nav><a class=back href="https://bridestudio.app/fr/gowns/">Robes de mariée</a>
 <details class=lang><summary>Français</summary><div class=lang-menu><a href="https://bridestudio.app/gowns/d0310-romantic-satin-ballgown-with-a-sweetheart-neckline/">English</a><a href="https://bridestudio.app/tr/gowns/d0310-romantik-saten-prenses-kesim-kalp-yaka/">Türkçe</a><a href="https://bridestudio.app/de/gowns/d0310-brautkleid-in-prinzessin-aus-satin-romantisch-herzausschnitt/">Deutsch</a><a href="https://bridestudio.app/es/gowns/d0310-vestido-corte-princesa-en-sat-n-rom-ntico-escote-coraz-n/">Español</a><a href="https://bridestudio.app/fr/gowns/d0310-robe-princesse-en-satin-romantique-encolure-c-ur/" class=on>Français</a><a href="https://bridestudio.app/it/gowns/d0310-abito-a-principessa-in-raso-romantico-scollo-a-cuore/">Italiano</a><a href="https://bridestudio.app/pt/gowns/d0310-vestido-princesa-em-cetim-rom-ntico-decote-cora-o/">Português</a><a href="https://bridestudio.app/ja/gowns/d0310/">日本語</a><a href="https://bridestudio.app/ko/gowns/d0310/">한국어</a><a href="https://bridestudio.app/zh/gowns/d0310/">简体中文</a><a href="https://bridestudio.app/hi/gowns/d0310/">हिन्दी</a></div></details></nav></header>
 <main>
-  <figure><img src="/assets/gowns/D0310.jpg" alt="Robe princesse en satin, romantique — encolure cœur" width="1000" height="1000"></figure>
+  <section class="tf" aria-label="Cette robe → Sur elle">
+    <div class="tf-stage">
+      <img class="tf-form" src="/assets/forms/D0310.jpg" alt="Cette robe"
+        width="360" height="360">
+      <img class="tf-worn" src="/assets/gowns/D0310.jpg" alt="Sur elle" width="1000" height="1000">
+      <span class="tf-veil" aria-hidden="true"></span>
+    </div>
+    <!-- Yüz ve ok — mağaza görselindeki düzenin aynısı.
+         Kareye binen yuvarlak bir madalyon ve ondan yüze uzanan kavisli beyaz
+         bir ok. Kutunun **dışında** duruyor: sol kenara taşıyor, içeride
+         olsaydı `overflow:hidden` onu keserdi — o kırpma perdenin çalışması
+         için gerekli. -->
+    <div class="tf-tag" aria-hidden="true">
+      <figure><img src="/assets/models/M1.jpg" alt="" width="360" height="360"></figure>
+      <img class="tf-arrow" src="/assets/img/arrow.png" alt="" width="145" height="263">
+    </div>
+    <p class="tf-cap"><span data-a>Cette robe</span><span data-b>Sur elle</span></p>
+</section>
   <div class=info>
     <p class=eyebrow>Romantic</p>
     <h1>Robe princesse en satin, romantique — encolure cœur</h1>
@@ -108,21 +125,31 @@ gtag('js',new Date());gtag('config','G-CGJLBG4684');
     <a class=btn href="https://apps.apple.com/app/id6741838118">Essayez-la sur vous</a>
   </div>
 </main>
-
-<section class="equation" aria-label="Sa photo + Cette robe = Sur elle">
-  <div class="eq-inner">
-    <figure class="eq-cell"><img src="/assets/models/M1.jpg" alt="Sa photo" width="360" height="360" loading="lazy"><figcaption>Sa photo</figcaption></figure>
-    <div class="eq-op" aria-hidden="true">+</div>
-    <figure class="eq-cell"><img src="/assets/forms/D0310.jpg" alt="Cette robe" width="360" height="360" loading="lazy"><figcaption>Cette robe</figcaption></figure>
-    <div class="eq-op" aria-hidden="true">=</div>
-    <figure class="eq-cell eq-result"><img src="/assets/gowns/D0310.jpg" alt="Sur elle" width="360" height="360" loading="lazy"><figcaption>Sur elle</figcaption></figure>
-  </div>
-</section>
 <footer>
   <a href="https://bridestudio.app/fr/gowns/">Voir la collection</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
 </footer>
-<div id=bs-consent hidden>
+<script>
+/* Gösteri, bölüm ekrana girdiğinde başlıyor.
+
+   Sayfa açılır açılmaz başlatmak, telefonda çoğu zaman kadın daha bakmadan
+   bitmesi demek — kaçırılan bir animasyon, hiç olmayanla aynı. Bir kez
+   oynuyor: tekrarlayan bir hareket bir süre sonra göze çarpmayı bırakıyor. */
+(function(){
+  var tf = document.querySelector('.tf');
+  if (!tf) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) { tf.classList.add('on'); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      tf.classList.add('on');
+      io.disconnect();
+    });
+  }, {threshold: 0.45});
+  io.observe(tf);
+})();
+</script><div id=bs-consent hidden>
   <p>Nous utilisons des cookies pour comprendre l'usage du site. Rien n'est enregistré sans votre accord.</p>
   <div class=bs-consent-actions>
     <button type=button data-consent=no>Refuser</button>

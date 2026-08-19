@@ -94,7 +94,24 @@ gtag('js',new Date());gtag('config','G-CGJLBG4684');
 <nav><a class=back href="https://bridestudio.app/pt/gowns/">Vestidos de noiva</a>
 <details class=lang><summary>Português</summary><div class=lang-menu><a href="https://bridestudio.app/gowns/d0275-classic-mikado-sheath-with-an-off-the-shoulder-neckline/">English</a><a href="https://bridestudio.app/tr/gowns/d0275-klasik-mikado-d-z-kesim-d-k-omuz/">Türkçe</a><a href="https://bridestudio.app/de/gowns/d0275-brautkleid-in-gerade-geschnitten-aus-mikado-klassisch-schulterfr/">Deutsch</a><a href="https://bridestudio.app/es/gowns/d0275-vestido-corte-recto-en-mikado-cl-sico-escote-palabra-de-honor/">Español</a><a href="https://bridestudio.app/fr/gowns/d0275-robe-droite-en-mikado-classique-encolure-bardot/">Français</a><a href="https://bridestudio.app/it/gowns/d0275-abito-a-tubino-in-mikado-classico-scollo-alla-bardot/">Italiano</a><a href="https://bridestudio.app/pt/gowns/d0275-vestido-tubinho-em-mikado-cl-ssico-decote-ombro-a-ombro/" class=on>Português</a><a href="https://bridestudio.app/ja/gowns/d0275/">日本語</a><a href="https://bridestudio.app/ko/gowns/d0275/">한국어</a><a href="https://bridestudio.app/zh/gowns/d0275/">简体中文</a><a href="https://bridestudio.app/hi/gowns/d0275/">हिन्दी</a></div></details></nav></header>
 <main>
-  <figure><img src="/assets/gowns/D0275.jpg" alt="Vestido tubinho em mikado, clássico — decote ombro a ombro" width="1000" height="1000"></figure>
+  <section class="tf" aria-label="Este vestido → Nela">
+    <div class="tf-stage">
+      <img class="tf-form" src="/assets/forms/D0275.jpg" alt="Este vestido"
+        width="360" height="360">
+      <img class="tf-worn" src="/assets/gowns/D0275.jpg" alt="Nela" width="1000" height="1000">
+      <span class="tf-veil" aria-hidden="true"></span>
+    </div>
+    <!-- Yüz ve ok — mağaza görselindeki düzenin aynısı.
+         Kareye binen yuvarlak bir madalyon ve ondan yüze uzanan kavisli beyaz
+         bir ok. Kutunun **dışında** duruyor: sol kenara taşıyor, içeride
+         olsaydı `overflow:hidden` onu keserdi — o kırpma perdenin çalışması
+         için gerekli. -->
+    <div class="tf-tag" aria-hidden="true">
+      <figure><img src="/assets/models/M1.jpg" alt="" width="360" height="360"></figure>
+      <img class="tf-arrow" src="/assets/img/arrow.png" alt="" width="145" height="263">
+    </div>
+    <p class="tf-cap"><span data-a>Este vestido</span><span data-b>Nela</span></p>
+</section>
   <div class=info>
     <p class=eyebrow>Classic</p>
     <h1>Vestido tubinho em mikado, clássico — decote ombro a ombro</h1>
@@ -108,21 +125,31 @@ gtag('js',new Date());gtag('config','G-CGJLBG4684');
     <a class=btn href="https://apps.apple.com/app/id6741838118">Experimente em você</a>
   </div>
 </main>
-
-<section class="equation" aria-label="A foto dela + Este vestido = Nela">
-  <div class="eq-inner">
-    <figure class="eq-cell"><img src="/assets/models/M1.jpg" alt="A foto dela" width="360" height="360" loading="lazy"><figcaption>A foto dela</figcaption></figure>
-    <div class="eq-op" aria-hidden="true">+</div>
-    <figure class="eq-cell"><img src="/assets/forms/D0275.jpg" alt="Este vestido" width="360" height="360" loading="lazy"><figcaption>Este vestido</figcaption></figure>
-    <div class="eq-op" aria-hidden="true">=</div>
-    <figure class="eq-cell eq-result"><img src="/assets/gowns/D0275.jpg" alt="Nela" width="360" height="360" loading="lazy"><figcaption>Nela</figcaption></figure>
-  </div>
-</section>
 <footer>
   <a href="https://bridestudio.app/pt/gowns/">Ver a coleção</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
 </footer>
-<div id=bs-consent hidden>
+<script>
+/* Gösteri, bölüm ekrana girdiğinde başlıyor.
+
+   Sayfa açılır açılmaz başlatmak, telefonda çoğu zaman kadın daha bakmadan
+   bitmesi demek — kaçırılan bir animasyon, hiç olmayanla aynı. Bir kez
+   oynuyor: tekrarlayan bir hareket bir süre sonra göze çarpmayı bırakıyor. */
+(function(){
+  var tf = document.querySelector('.tf');
+  if (!tf) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) { tf.classList.add('on'); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      tf.classList.add('on');
+      io.disconnect();
+    });
+  }, {threshold: 0.45});
+  io.observe(tf);
+})();
+</script><div id=bs-consent hidden>
   <p>Usamos cookies para entender como o site é usado. Nada é guardado até você concordar.</p>
   <div class=bs-consent-actions>
     <button type=button data-consent=no>Recusar</button>
