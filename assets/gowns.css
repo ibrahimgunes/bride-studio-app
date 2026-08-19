@@ -1,6 +1,14 @@
 /* Gelinlik sayfaları — ana sayfayla aynı dil, ayrı dosyada.
    Bin altı yüz sayfa aynı stili taşıyacak; satır içine gömmek her sayfayı
    şişirir, ayrı dosya bir kez indirilip önbelleğe giriyor. */
+/* Logonun yazısı, ana sayfadakiyle aynı.
+   Gelinlik sayfaları New York serif kullanıyordu ve aynı siteye ait iki sayfa
+   iki farklı marka gibi görünüyordu — Pinterest'ten gelen ziyaretçi doğrudan
+   buraya düşüyor, yani gördüğü ilk logo bu. `swap`, yazı inene kadar metnin
+   görünmesini sağlıyor. */
+@font-face{font-family:"Million Astteroids";
+  src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
+  font-weight:400;font-display:swap}
 :root{--cream:#FAF7F4;--ink:#3C3732;--taupe:#A58E7C;--gold:#BD9973;--dark:#14100E;--hair:rgba(165,142,124,.22)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--cream);color:var(--ink);font:400 17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
@@ -8,8 +16,45 @@ h1,h2{font-family:"New York",ui-serif,Georgia,serif;font-weight:400;line-height:
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding:22px 30px;border-bottom:1px solid var(--hair)}
-.mark{font-family:"New York",ui-serif,Georgia,serif;font-size:20px}
+.mark{font-family:"Million Astteroids","New York",ui-serif,Georgia,serif;font-size:30px;line-height:1;padding-top:4px}
 .back{font-size:14px;color:var(--taupe)}
+
+/* ── Denklem ──────────────────────────────────────────────────────────────
+   Bir fotoğraf, bir gelinlik, ve ikisinin sonucu — yan yana, tek bakışta.
+
+   Kaydırmaya bağlı değil. Ana sayfada bu hikâye sabitlenen bir bölümle
+   anlatılıyor ve orada doğru: ziyaretçi zaten aşağı iniyor. Burada ise kadın
+   Pinterest'ten tek bir gelinliğe bakmaya geldi; onu kaydırmaya zorlamak
+   yerine sayfa açılırken bir kez oynayıp duruyor.
+
+   Sonuç karesi altınla çevrelenmiş: üçü eşit görünürse denklem bir sıralama
+   olur, oysa anlatılan şey soldakilerin sağdakine dönüşmesi. */
+.equation{background:var(--dark);color:#fff;padding:64px 30px 70px;margin-top:20px}
+.eq-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;
+  justify-content:center;gap:clamp(14px,3vw,42px);flex-wrap:wrap}
+.eq-cell{margin:0;text-align:center;width:clamp(120px,17vw,210px)}
+.eq-cell img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;background:#241d19;
+  opacity:0;transform:translateY(18px) scale(.97);
+  animation:eq-in .7s cubic-bezier(.16,.86,.26,1) forwards}
+.eq-cell:nth-child(1) img{animation-delay:.15s}
+.eq-cell:nth-child(3) img{animation-delay:.35s}
+.eq-result img{border:1px solid var(--gold);animation-delay:.62s}
+.eq-cell figcaption{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-top:14px}
+.eq-op{font:400 clamp(20px,2.4vw,30px)/1 "New York",ui-serif,Georgia,serif;
+  color:var(--gold);opacity:0;animation:eq-in .5s ease forwards;padding-bottom:26px}
+.eq-inner>.eq-op:nth-child(2){animation-delay:.3s}
+.eq-inner>.eq-op:nth-child(4){animation-delay:.55s}
+@keyframes eq-in{to{opacity:1;transform:none}}
+@media(max-width:620px){
+  .equation{padding:44px 20px 48px}
+  .eq-cell{width:clamp(96px,26vw,140px)}
+  .eq-cell figcaption{font-size:10.5px;letter-spacing:.1em}
+}
+/* Hareketi kapatmış olana hepsi birden, yerinde. */
+@media(prefers-reduced-motion:reduce){
+  .eq-cell img,.eq-op{animation:none;opacity:1;transform:none}
+}
 main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .eyebrow{font:600 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin:0 0 14px}
@@ -22,7 +67,27 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
 .badge{display:inline-block;line-height:0}
 .badge img{height:46px;width:auto}
-.btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
+/* Tek eylem, ve üstünden geçen ışık.
+   Sayfadaki her şey bakılacak şey; bu ise yapılacak şey, ve düz koyu bir
+   kapsül olarak metnin arasında kayboluyordu. Parıltı altı saniyede bir
+   geçiyor — sürekli olan bir hareket göze çarpmayı bırakıyor, arada bir olan
+   çarpıyor. */
+.btn{position:relative;display:inline-block;padding:16px 34px;border-radius:999px;
+  background:var(--dark);color:#fff;font:500 15px/1 sans-serif;overflow:hidden;
+  box-shadow:0 0 0 0 rgba(189,153,115,.5);animation:btn-pulse 6s ease-in-out infinite}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.34),transparent);
+  transform:skewX(-18deg);animation:btn-shine 6s ease-in-out infinite}
+@keyframes btn-shine{0%{left:-60%}18%{left:130%}100%{left:130%}}
+@keyframes btn-pulse{
+  0%,12%{box-shadow:0 0 0 0 rgba(189,153,115,.45)}
+  6%{box-shadow:0 0 0 12px rgba(189,153,115,0)}
+  100%{box-shadow:0 0 0 0 rgba(189,153,115,0)}}
+.btn:hover{background:var(--gold)}
+@media(prefers-reduced-motion:reduce){
+  .btn,.btn::after{animation:none}
+  .btn::after{display:none}
+}
 header nav{display:flex;align-items:center;gap:18px}
 .lang{position:relative;font-size:13px}
 .lang summary{list-style:none;cursor:pointer;color:var(--taupe);padding:6px 10px;border:1px solid var(--hair);border-radius:999px}

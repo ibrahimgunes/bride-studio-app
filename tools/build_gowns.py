@@ -70,6 +70,30 @@ UI = {
     "hi": ("वेडिंग ड्रेस", "खुद पर आज़माएँ", "कपड़ा", "नेकलाइन", "सिल्हूट", "लंबाई", "डिटेल", "पूरा कलेक्शन देखें", "App Store से डाउनलोड करें"),
 }
 
+# Denklemin altındaki üç kelime. Cümle değil etiket: kareler zaten anlatıyor,
+# yazı yalnızca hangisinin ne olduğunu söylüyor.
+# Hangi gelinliğin vitrin karesini hangi model ürettiği.
+#
+# Firestore'daki üretim kayıtlarından bir kez çıkarıldı ve dosyaya yazıldı:
+# her kuruluşta yeniden sorgulamak bin dokuz yüz sayfa için gereksiz, ve
+# eşleşme yalnızca yeni gelinlik geldiğinde değişiyor.
+# Yenilemek için: tools/map_models.py
+MODEL_BY_DRESS = json.loads((pathlib.Path(__file__).parent / "dress_model.json").read_text())
+
+EQUATION = {
+    "en": ("Her photo", "This gown", "On her"),
+    "tr": ("Fotoğrafı", "Bu gelinlik", "Üzerinde"),
+    "de": ("Ihr Foto", "Dieses Kleid", "An ihr"),
+    "es": ("Su foto", "Este vestido", "En ella"),
+    "fr": ("Sa photo", "Cette robe", "Sur elle"),
+    "it": ("La sua foto", "Questo abito", "Su di lei"),
+    "pt-BR": ("A foto dela", "Este vestido", "Nela"),
+    "ja": ("彼女の写真", "このドレス", "着た姿"),
+    "ko": ("그녀의 사진", "이 드레스", "입은 모습"),
+    "zh-Hans": ("她的照片", "这件婚纱", "穿上后"),
+    "hi": ("उनकी फ़ोटो", "यह ड्रेस", "उन पर"),
+}
+
 # Dilin kendi adı, İngilizcesi değil: menüde "Türkçe" arayan biri "Turkish"
 # yazısını taramıyor.
 LANG_NAMES = {
@@ -190,9 +214,9 @@ def head(lang, title, desc, canonical, alternates, image):
 <meta property="og:image" content="{image}">
 <meta property="og:type" content="product">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{SITE}/assets/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="{SITE}/assets/apple-touch-icon.png">
-<link rel="stylesheet" href="{SITE}/assets/gowns.css">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/gowns.css">
 {consent.head_scripts(GA)}
 </head>
 <body>{langhint.strip(lang)}"""
@@ -221,6 +245,40 @@ def lang_picker(current, url_for):
             f'<div class=lang-menu>{items}</div></details>')
 
 
+def equation_block(d, lang, img):
+    """Bir fotoğraf, bir gelinlik, ve sonucu — yan yana.
+
+    Pinterest'ten gelen kadın ana sayfayı hiç görmüyor; doğrudan buraya
+    düşüyor, ve burada bugüne kadar yalnızca bitmiş bir kare vardı. Ne olduğu
+    ve kendisinin de yapabileceği hiçbir yerde yazmıyordu.
+
+    Üç kare de gerçek ve bu gelinliğe ait: soldaki, bu vitrin karesini üreten
+    profilin kendi fotoğrafı; ortadaki gelinliğin terzi kalıbındaki hâli;
+    sağdaki ikisinin sonucu. Temsilî görsel yok.
+
+    Ham karesi olmayan gelinlikte bölüm hiç çıkmıyor — dördünde Storage'da yok,
+    ve kırık bir görsel, olmayan bir bölümden kötü.
+    """
+    form = ROOT / "assets" / "forms" / f"{d['id']}.jpg"
+    if not form.exists():
+        return ""
+    eq = EQUATION.get(lang, EQUATION["en"])
+    model = MODEL_BY_DRESS.get(d["id"], "M1")
+    cell = lambda src, cap, extra="": (
+        f'<figure class="eq-cell{extra}"><img src="{src}" alt="{esc(cap)}" '
+        f'width="360" height="360" loading="lazy">'
+        f'<figcaption>{esc(cap)}</figcaption></figure>')
+    return f"""<section class="equation" aria-label="{esc(eq[0])} + {esc(eq[1])} = {esc(eq[2])}">
+  <div class="eq-inner">
+    {cell(f"/assets/models/{model}.jpg", eq[0])}
+    <div class="eq-op" aria-hidden="true">+</div>
+    {cell(f"/assets/forms/{d['id']}.jpg", eq[1])}
+    <div class="eq-op" aria-hidden="true">=</div>
+    {cell(img, eq[2], " eq-result")}
+  </div>
+</section>"""
+
+
 def gown_page(d, lang, path_map):
     code = LANGS[lang]
     ui = UI[lang]
@@ -230,7 +288,7 @@ def gown_page(d, lang, path_map):
     alternates = [(l if l not in ("pt-BR", "zh-Hans") else l,
                    f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/{path_map[l]}/")
                   for l in LANGS]
-    img = f"{SITE}/assets/gowns/{d['id']}.jpg"
+    img = f"/assets/gowns/{d['id']}.jpg"
     m = d["meta"]
 
     # Yapısal veri: arama sonucunda görselin ve adın birlikte çıkmasını
@@ -250,6 +308,7 @@ def gown_page(d, lang, path_map):
         for l, v in rows if v)
 
     home = f"{SITE}/{code + '/' if code else ''}"
+    equation = equation_block(d, lang, img)
     return f"""{head(lang, esc(title) + " — Bride Studio", esc(desc), canonical, alternates, img)}
 <script type="application/ld+json">{ld}</script>
 <header><a class=mark href="{home}">Bride Studio</a>
@@ -266,6 +325,8 @@ def gown_page(d, lang, path_map):
     <a class=btn href="{APPSTORE}">{esc(ui[1])}</a>
   </div>
 </main>
+
+{equation}
 <footer>
   <a href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[7])}</a>
   <span>Results are AI visualisations, not photographs of a real fitting.</span>
@@ -284,16 +345,16 @@ def index_page(dresses, lang, paths):
         t = d["title"].get(lang) or d["title"].get("en", d["id"])
         cards.append(
             f'<a class=card href="{SITE}/{code + "/" if code else ""}gowns/{paths[d["id"]][lang]}/">'
-            f'<img src="{SITE}/assets/gowns/{d["id"]}.jpg" alt="{esc(t)}" loading="lazy" width="1000" height="1000">'
+            f'<img src="/assets/gowns/{d["id"]}.jpg" alt="{esc(t)}" loading="lazy" width="1000" height="1000">'
             f'<h2>{esc(t)}</h2></a>')
-    return f"""{head(lang, esc(ui[0]) + " — Bride Studio", esc(ui[0]), canonical, alternates, f"{SITE}/assets/gowns/{dresses[0]['id']}.jpg")}
+    return f"""{head(lang, esc(ui[0]) + " — Bride Studio", esc(ui[0]), canonical, alternates, f"/assets/gowns/{dresses[0]['id']}.jpg")}
 <header><a class=mark href="{SITE}/{code + '/' if code else ''}">Bride Studio</a>
 <nav>{lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/")}</nav></header>
 <main class=grid-wrap>
   <h1 class=page-title>{esc(ui[0])}</h1>
   <div class=grid>{''.join(cards)}</div>
 </main>
-<footer><a class=badge href="{APPSTORE}"><img src="{SITE}/assets/appstore-badge.svg" alt="Download on the App Store" height="46"></a>
+<footer><a class=badge href="{APPSTORE}"><img src="/assets/appstore-badge.svg" alt="Download on the App Store" height="46"></a>
 <span class=social><a href="https://www.instagram.com/bridestudioapp" rel="me">Instagram</a>
 <a href="https://www.tiktok.com/@bridestudioapp" rel="me">TikTok</a>
 <a href="https://tr.pinterest.com/bridestudioai/" rel="me">Pinterest</a></span></footer>
@@ -304,6 +365,14 @@ def index_page(dresses, lang, paths):
 CSS = """/* Gelinlik sayfaları — ana sayfayla aynı dil, ayrı dosyada.
    Bin altı yüz sayfa aynı stili taşıyacak; satır içine gömmek her sayfayı
    şişirir, ayrı dosya bir kez indirilip önbelleğe giriyor. */
+/* Logonun yazısı, ana sayfadakiyle aynı.
+   Gelinlik sayfaları New York serif kullanıyordu ve aynı siteye ait iki sayfa
+   iki farklı marka gibi görünüyordu — Pinterest'ten gelen ziyaretçi doğrudan
+   buraya düşüyor, yani gördüğü ilk logo bu. `swap`, yazı inene kadar metnin
+   görünmesini sağlıyor. */
+@font-face{font-family:"Million Astteroids";
+  src:url(/assets/fonts/MillionAstteroids-R9njo.ttf) format("truetype");
+  font-weight:400;font-display:swap}
 :root{--cream:#FAF7F4;--ink:#3C3732;--taupe:#A58E7C;--gold:#BD9973;--dark:#14100E;--hair:rgba(165,142,124,.22)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--cream);color:var(--ink);font:400 17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
@@ -311,8 +380,45 @@ h1,h2{font-family:"New York",ui-serif,Georgia,serif;font-weight:400;line-height:
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding:22px 30px;border-bottom:1px solid var(--hair)}
-.mark{font-family:"New York",ui-serif,Georgia,serif;font-size:20px}
+.mark{font-family:"Million Astteroids","New York",ui-serif,Georgia,serif;font-size:30px;line-height:1;padding-top:4px}
 .back{font-size:14px;color:var(--taupe)}
+
+/* ── Denklem ──────────────────────────────────────────────────────────────
+   Bir fotoğraf, bir gelinlik, ve ikisinin sonucu — yan yana, tek bakışta.
+
+   Kaydırmaya bağlı değil. Ana sayfada bu hikâye sabitlenen bir bölümle
+   anlatılıyor ve orada doğru: ziyaretçi zaten aşağı iniyor. Burada ise kadın
+   Pinterest'ten tek bir gelinliğe bakmaya geldi; onu kaydırmaya zorlamak
+   yerine sayfa açılırken bir kez oynayıp duruyor.
+
+   Sonuç karesi altınla çevrelenmiş: üçü eşit görünürse denklem bir sıralama
+   olur, oysa anlatılan şey soldakilerin sağdakine dönüşmesi. */
+.equation{background:var(--dark);color:#fff;padding:64px 30px 70px;margin-top:20px}
+.eq-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;
+  justify-content:center;gap:clamp(14px,3vw,42px);flex-wrap:wrap}
+.eq-cell{margin:0;text-align:center;width:clamp(120px,17vw,210px)}
+.eq-cell img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;background:#241d19;
+  opacity:0;transform:translateY(18px) scale(.97);
+  animation:eq-in .7s cubic-bezier(.16,.86,.26,1) forwards}
+.eq-cell:nth-child(1) img{animation-delay:.15s}
+.eq-cell:nth-child(3) img{animation-delay:.35s}
+.eq-result img{border:1px solid var(--gold);animation-delay:.62s}
+.eq-cell figcaption{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-top:14px}
+.eq-op{font:400 clamp(20px,2.4vw,30px)/1 "New York",ui-serif,Georgia,serif;
+  color:var(--gold);opacity:0;animation:eq-in .5s ease forwards;padding-bottom:26px}
+.eq-inner>.eq-op:nth-child(2){animation-delay:.3s}
+.eq-inner>.eq-op:nth-child(4){animation-delay:.55s}
+@keyframes eq-in{to{opacity:1;transform:none}}
+@media(max-width:620px){
+  .equation{padding:44px 20px 48px}
+  .eq-cell{width:clamp(96px,26vw,140px)}
+  .eq-cell figcaption{font-size:10.5px;letter-spacing:.1em}
+}
+/* Hareketi kapatmış olana hepsi birden, yerinde. */
+@media(prefers-reduced-motion:reduce){
+  .eq-cell img,.eq-op{animation:none;opacity:1;transform:none}
+}
 main{max-width:1180px;margin:0 auto;padding:60px 30px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .eyebrow{font:600 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin:0 0 14px}
@@ -325,7 +431,27 @@ main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .spec dd{margin:0;font-family:"New York",ui-serif,Georgia,serif;font-size:17px}
 .badge{display:inline-block;line-height:0}
 .badge img{height:46px;width:auto}
-.btn{display:inline-block;padding:16px 34px;border-radius:999px;background:var(--dark);color:#fff;font:500 15px/1 sans-serif}
+/* Tek eylem, ve üstünden geçen ışık.
+   Sayfadaki her şey bakılacak şey; bu ise yapılacak şey, ve düz koyu bir
+   kapsül olarak metnin arasında kayboluyordu. Parıltı altı saniyede bir
+   geçiyor — sürekli olan bir hareket göze çarpmayı bırakıyor, arada bir olan
+   çarpıyor. */
+.btn{position:relative;display:inline-block;padding:16px 34px;border-radius:999px;
+  background:var(--dark);color:#fff;font:500 15px/1 sans-serif;overflow:hidden;
+  box-shadow:0 0 0 0 rgba(189,153,115,.5);animation:btn-pulse 6s ease-in-out infinite}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.34),transparent);
+  transform:skewX(-18deg);animation:btn-shine 6s ease-in-out infinite}
+@keyframes btn-shine{0%{left:-60%}18%{left:130%}100%{left:130%}}
+@keyframes btn-pulse{
+  0%,12%{box-shadow:0 0 0 0 rgba(189,153,115,.45)}
+  6%{box-shadow:0 0 0 12px rgba(189,153,115,0)}
+  100%{box-shadow:0 0 0 0 rgba(189,153,115,0)}}
+.btn:hover{background:var(--gold)}
+@media(prefers-reduced-motion:reduce){
+  .btn,.btn::after{animation:none}
+  .btn::after{display:none}
+}
 header nav{display:flex;align-items:center;gap:18px}
 .lang{position:relative;font-size:13px}
 .lang summary{list-style:none;cursor:pointer;color:var(--taupe);padding:6px 10px;border:1px solid var(--hair);border-radius:999px}
