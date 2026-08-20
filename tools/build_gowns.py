@@ -474,7 +474,7 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
    değeri kutunun kendi yüksekliğine göre hesaplanıyordu. Sıralı düzende yer
    tahmine kalmıyor. */
 .tf-tag{position:absolute;left:5%;top:calc(34% - 40px);z-index:3;pointer-events:none;
-  display:flex;align-items:flex-start;gap:clamp(4px,.8vw,9px);
+  display:flex;align-items:flex-start;gap:clamp(6px,1vw,12px);
   opacity:0;transform:translate(-10px,6px) scale(.94)}
 /* Madalyon büyütüldü (62-92 → 84-116, 2026-08-20). Telefonda karenin beşte
    biri kadardı ve sayfanın bütün hikâyesi o: ziyaretçi Pinterest'ten geliyor ve
@@ -492,7 +492,7 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 /* Ok sağa doğru yatırıldı: çizim dikeye yakın çıkıyor ve madalyonun hemen
    üstünü işaret ediyordu, oysa kadın sağda. Dönme ekseni sol alt köşe, yani
    ok madalyondan çıkmaya devam ediyor, yalnızca ucu sağa gidiyor. */
-.tf-arrow{width:clamp(28px,3.3vw,42px);height:auto;margin-top:-52px;
+.tf-arrow{width:clamp(28px,3.3vw,42px);height:auto;margin-top:-64px;
   border:0;border-radius:0;box-shadow:none;
   transform:rotate(24deg);transform-origin:bottom left;
   filter:drop-shadow(0 2px 6px rgba(20,16,14,.55))}
@@ -505,8 +505,12 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 .tf-cap span{grid-area:1/1}
 .tf-cap [data-a]{font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
   color:var(--taupe);align-self:start}
-.tf-cap [data-b]{font-size:clamp(15px,1.55vw,18px);line-height:1.45;
-  color:var(--ink);opacity:0;max-width:34ch}
+/* Düz gövde yazısıydı ve sayfanın geri kalanının yanında sönük duruyordu.
+   Serif, italik ve altın: başlıkla aynı aileden, ama başlığı bastırmayacak
+   incelikte. */
+.tf-cap [data-b]{font-family:"New York",ui-serif,Georgia,serif;font-style:italic;
+  font-size:clamp(16px,1.7vw,20px);line-height:1.45;letter-spacing:.005em;
+  color:var(--gold);opacity:0;max-width:34ch}
 
 /* Gösteri, bir kez. `.on` geldiğinde başlıyor — sayfa açılır açılmaz değil,
    bölüm ekrana girince: üstte olsa bile kadın oraya bakıyor olmayabilir. */
@@ -551,6 +555,13 @@ main{max-width:1180px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(20px,4vw,
 }
 main figure{margin:0;border-radius:20px;overflow:hidden;background:#efe9e3}
 .eyebrow{font:600 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin:0 0 14px}
+/* Sağ sütun satırın boyunu dolduruyor ve düğme dibe iniyor.
+   `align-items:stretch` sütunu zaten uzatıyordu ama içerik tepede kalıp
+   altında boşluk bırakıyordu: soldaki alt yazı düğmenin bittiği yerin
+   aşağısına sarkıyor, iki sütun aynı yerde bitmiyordu. Kullanıcı bunu bir
+   kez söylemişti, kırılan yer alt yazı eklenince burasıydı. */
+.info{display:flex;flex-direction:column}
+.info .btn{margin-top:auto}
 .info h1{font-size:clamp(28px,3.6vw,44px)}
 .rule{width:46px;height:1px;background:var(--gold);opacity:.6;margin:20px 0}
 .lead{color:#5f584f;margin:0 0 28px}
