@@ -89,8 +89,8 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
    Serif, italik ve altın: başlıkla aynı aileden, ama başlığı bastırmayacak
    incelikte. */
 .tf-cap [data-b]{font-family:"New York",ui-serif,Georgia,serif;font-style:italic;
-  font-size:clamp(16px,1.7vw,20px);line-height:1.45;letter-spacing:.005em;
-  color:var(--gold);opacity:0;max-width:34ch}
+  font-size:clamp(15px,1.45vw,18px);line-height:1.45;letter-spacing:.005em;
+  color:var(--gold);opacity:0}
 
 /* Gösteri, bir kez. `.on` geldiğinde başlıyor — sayfa açılır açılmaz değil,
    bölüm ekrana girince: üstte olsa bile kadın oraya bakıyor olmayabilir. */
