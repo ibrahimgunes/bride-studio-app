@@ -94,6 +94,29 @@ EQUATION = {
     "hi": ("उनकी फ़ोटो", "यह ड्रेस", "उन पर"),
 }
 
+# Dönüşümün altındaki satır.
+#
+# Eskiden burada yalnızca "On her" yazıyordu — resmi etiketleyen ölü bir kelime.
+# Telefonda Pinterest'in kendi tarayıcısından bakınca öksüz duruyordu ve
+# sayfanın rakiplerden ayrıldığı yeri hiç söylemiyordu: gelinliği kadının kendi
+# boyunda, kilosunda ve teninde göstermesi. Etiket cümleye çevrildi.
+#
+# Yeri katlanma çizgisinin üstünde kalmalı: Pinterest'in tarayıcısında altta
+# "Save" çubuğu ekranın bir kısmını yiyor, aşağıdaki hiçbir şey görülmüyor.
+PROMISE = {
+    "en": "Try this gown with your own face, height, size and skin tone.",
+    "tr": "Bu gelinliği kendi yüzün, boyun, kilon ve ten renginle dene.",
+    "de": "Probiere dieses Kleid mit deinem Gesicht, deiner Größe, deiner Figur und deinem Hautton.",
+    "es": "Prueba este vestido con tu propio rostro, tu altura, tu talla y tu tono de piel.",
+    "fr": "Essaie cette robe avec ton visage, ta taille, ta silhouette et ton teint.",
+    "it": "Prova questo abito con il tuo viso, la tua altezza, la tua taglia e il tuo incarnato.",
+    "pt-BR": "Experimente este vestido com seu rosto, sua altura, seu manequim e seu tom de pele.",
+    "ja": "このドレスを、あなたの顔・身長・体型・肌の色で試してみて。",
+    "ko": "이 드레스를 당신의 얼굴, 키, 체형, 피부톤으로 입어보세요.",
+    "zh-Hans": "用你的脸庞、身高、身形和肤色试穿这件婚纱。",
+    "hi": "इस ड्रेस को अपने चेहरे, कद, नाप और रंगत के साथ आज़माएँ।",
+}
+
 # Dilin kendi adı, İngilizcesi değil: menüde "Türkçe" arayan biri "Turkish"
 # yazısını taramıyor.
 LANG_NAMES = {
@@ -310,7 +333,7 @@ def equation_block(d, lang, img):
       <figure><img src="/assets/models/{model}.jpg" alt="" width="360" height="360"></figure>
       <img class="tf-arrow" src="/assets/img/arrow.png" alt="" width="145" height="263">
     </div>
-    <p class="tf-cap"><span data-a>{esc(eq[1])}</span><span data-b>{esc(eq[2])}</span></p>
+    <p class="tf-cap"><span data-a>{esc(eq[1])}</span><span data-b>{esc(PROMISE.get(lang, PROMISE["en"]))}</span></p>
 </section>"""
 
 
@@ -453,7 +476,12 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 .tf-tag{position:absolute;left:5%;top:calc(34% - 40px);z-index:3;pointer-events:none;
   display:flex;align-items:flex-start;gap:clamp(4px,.8vw,9px);
   opacity:0;transform:translate(-10px,6px) scale(.94)}
-.tf-tag figure{margin:0;width:clamp(62px,7vw,92px);flex:0 0 auto;
+/* Madalyon büyütüldü (62-92 → 84-116, 2026-08-20). Telefonda karenin beşte
+   biri kadardı ve sayfanın bütün hikâyesi o: ziyaretçi Pinterest'ten geliyor ve
+   ilk gördüğü şey stok gibi duran bir gelin fotoğrafı. Onu stoktan ayıran tek
+   şey madalyon ve ok; küçük kalınca hikâye anlatılmıyor, süs gibi duruyor.
+   Daha büyüğü gelinlikle yarışmaya başlar, ve satılan şey gelinlik. */
+.tf-tag figure{margin:0;width:clamp(84px,9vw,116px);flex:0 0 auto;
   border-radius:50%;overflow:hidden;border:4px solid #fff;
   box-shadow:0 10px 30px rgba(20,16,14,.42);line-height:0}
 /* Yalnızca madalyondaki yüz. Eskiden `.tf-tag img` idi ve kutudaki her
@@ -464,16 +492,21 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 /* Ok sağa doğru yatırıldı: çizim dikeye yakın çıkıyor ve madalyonun hemen
    üstünü işaret ediyordu, oysa kadın sağda. Dönme ekseni sol alt köşe, yani
    ok madalyondan çıkmaya devam ediyor, yalnızca ucu sağa gidiyor. */
-.tf-arrow{width:clamp(22px,2.6vw,34px);height:auto;margin-top:-46px;
+.tf-arrow{width:clamp(28px,3.3vw,42px);height:auto;margin-top:-52px;
   border:0;border-radius:0;box-shadow:none;
   transform:rotate(24deg);transform-origin:bottom left;
   filter:drop-shadow(0 2px 6px rgba(20,16,14,.55))}
 
-.tf-cap{margin:14px 0 0;font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
-  position:relative;height:1.2em}
-.tf-cap span{position:absolute;left:0}
-.tf-cap [data-a]{color:var(--taupe)}
-.tf-cap [data-b]{color:var(--gold);opacity:0}
+/* İki hâl üst üste duruyor ve ızgara ikisinin de yerini ayırıyor. Eskiden
+   mutlak konum ve `height:1.2em` vardı — tek kelime taşıdığı sürece sorun
+   değildi, ama ikinci hâl artık bir cümle: sabit yükseklik onu kırpardı,
+   mutlak konum da satır kaydırmayı bozardı. */
+.tf-cap{margin:14px 0 0;display:grid}
+.tf-cap span{grid-area:1/1}
+.tf-cap [data-a]{font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--taupe);align-self:start}
+.tf-cap [data-b]{font-size:clamp(15px,1.55vw,18px);line-height:1.45;
+  color:var(--ink);opacity:0;max-width:34ch}
 
 /* Gösteri, bir kez. `.on` geldiğinde başlıyor — sayfa açılır açılmaz değil,
    bölüm ekrana girince: üstte olsa bile kadın oraya bakıyor olmayabilir. */
