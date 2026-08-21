@@ -50,9 +50,28 @@ def head_scripts(ga):
     return f"""<script>
 window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}
 var bsOK=null;try{{bsOK=localStorage.getItem('bs-consent');}}catch(e){{}}
+// Ziyaretçi AB/İngiltere'de mi.
+//
+// Statik sitede sunucu yok, yani IP'ye bakamıyoruz; tarayıcının kendi saat
+// dilimi elimizdeki tek ipucu ve ağ isteği gerektirmiyor. Kaba ama yanılma
+// yönü doğru tarafa düşüyor: şüphede kalırsa band gösteriliyor.
+//
+// Neden hiç göstermemek yerine bölgeye bağlamak: band 90 günde toplanan
+// veriyi kesiyordu ve ölçemediğimiz şeyi yönetemiyoruz. AB dışında onay
+// aramamak veriyi geri getiriyor, AB'de aramak da riski yerinde tutuyor.
+function bsEU(){{
+  try{{
+    var z=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+    if(/^Atlantic\/(Reykjavik|Azores|Canary|Madeira)$/.test(z))return true;
+    if(z.indexOf('Europe/')!==0)return false;
+    // Avrupa saat diliminde olup AB/AEA'da olmayanlar.
+    return !/^Europe\/(Istanbul|Moscow|Kirov|Volgograd|Saratov|Samara|Ulyanovsk|Astrakhan|Minsk)$/.test(z);
+  }}catch(e){{return true;}}
+}}
+var bsNeed=bsEU();
 gtag('consent','default',{{
  'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
- 'analytics_storage':bsOK==='yes'?'granted':'denied','wait_for_update':500}});
+ 'analytics_storage':(!bsNeed||bsOK==='yes')?'granted':'denied','wait_for_update':500}});
 gtag('js',new Date());gtag('config','{ga}');
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id={ga}"></script>"""
@@ -91,7 +110,8 @@ def banner(lang):
 (function(){{
   var box=document.getElementById('bs-consent'),saved=null;
   try{{saved=localStorage.getItem('bs-consent');}}catch(e){{}}
-  if(saved===null)box.hidden=false;
+  // Band yalnızca onay gereken bölgede ve yalnızca henüz seçim yapılmamışsa.
+  if(saved===null&&(typeof bsEU!=='function'||bsEU()))box.hidden=false;
   box.addEventListener('click',function(e){{
     var pick=e.target.getAttribute&&e.target.getAttribute('data-consent');
     if(!pick)return;
