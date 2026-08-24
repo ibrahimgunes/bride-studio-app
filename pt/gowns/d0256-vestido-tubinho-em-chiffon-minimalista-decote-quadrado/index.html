@@ -28,29 +28,9 @@
 <link rel="stylesheet" href="/assets/gowns.css">
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-var bsOK=null;try{bsOK=localStorage.getItem('bs-consent');}catch(e){}
-// Ziyaretçi AB/İngiltere'de mi.
-//
-// Statik sitede sunucu yok, yani IP'ye bakamıyoruz; tarayıcının kendi saat
-// dilimi elimizdeki tek ipucu ve ağ isteği gerektirmiyor. Kaba ama yanılma
-// yönü doğru tarafa düşüyor: şüphede kalırsa band gösteriliyor.
-//
-// Neden hiç göstermemek yerine bölgeye bağlamak: band 90 günde toplanan
-// veriyi kesiyordu ve ölçemediğimiz şeyi yönetemiyoruz. AB dışında onay
-// aramamak veriyi geri getiriyor, AB'de aramak da riski yerinde tutuyor.
-function bsEU(){
-  try{
-    var z=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
-    if(/^Atlantic\/(Reykjavik|Azores|Canary|Madeira)$/.test(z))return true;
-    if(z.indexOf('Europe/')!==0)return false;
-    // Avrupa saat diliminde olup AB/AEA'da olmayanlar.
-    return !/^Europe\/(Istanbul|Moscow|Kirov|Volgograd|Saratov|Samara|Ulyanovsk|Astrakhan|Minsk)$/.test(z);
-  }catch(e){return true;}
-}
-var bsNeed=bsEU();
 gtag('consent','default',{
  'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
- 'analytics_storage':(!bsNeed||bsOK==='yes')?'granted':'denied','wait_for_update':500});
+ 'analytics_storage':'granted'});
 gtag('js',new Date());gtag('config','G-CGJLBG4684');
 
 // App Store'a tıklama.
@@ -188,47 +168,6 @@ document.addEventListener('click',function(e){
     });
   }, {threshold: 0.45});
   io.observe(tf);
-})();
-</script><div id=bs-consent hidden>
-  <p>Usamos cookies para entender como o site é usado. Nada é guardado até você concordar.</p>
-  <div class=bs-consent-actions>
-    <button type=button data-consent=no>Recusar</button>
-    <button type=button data-consent=yes>Aceitar</button>
-  </div>
-</div>
-<style>
-#bs-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
- max-width:660px;margin:0 auto;display:flex;gap:18px;align-items:center;
- flex-wrap:wrap;justify-content:space-between;
- background:#14100E;color:#FAF7F4;padding:18px 20px;border-radius:14px;
- box-shadow:0 10px 40px rgba(0,0,0,.28);font-size:14px;line-height:1.45}
-#bs-consent[hidden]{display:none}
-#bs-consent p{margin:0;flex:1 1 300px;color:#FAF7F4}
-.bs-consent-actions{display:flex;gap:10px;flex:0 0 auto}
-#bs-consent button{font:inherit;cursor:pointer;padding:9px 18px;border-radius:999px;
- border:1px solid #A58E7C;background:transparent;color:#FAF7F4;white-space:nowrap}
-#bs-consent button[data-consent=yes]{background:#BD9973;border-color:#BD9973;color:#14100E}
-#bs-consent button:focus-visible{outline:2px solid #FAF7F4;outline-offset:2px}
-@media (max-width:520px){
- #bs-consent{flex-direction:column;align-items:stretch}
- .bs-consent-actions{display:grid;grid-template-columns:1fr 1fr}
- #bs-consent button{width:100%}
-}
-</style>
-<script>
-(function(){
-  var box=document.getElementById('bs-consent'),saved=null;
-  try{saved=localStorage.getItem('bs-consent');}catch(e){}
-  // Band yalnızca onay gereken bölgede ve yalnızca henüz seçim yapılmamışsa.
-  if(saved===null&&(typeof bsEU!=='function'||bsEU()))box.hidden=false;
-  box.addEventListener('click',function(e){
-    var pick=e.target.getAttribute&&e.target.getAttribute('data-consent');
-    if(!pick)return;
-    try{localStorage.setItem('bs-consent',pick);}catch(e){}
-    if(window.gtag)gtag('consent','update',
-      {'analytics_storage':pick==='yes'?'granted':'denied'});
-    box.hidden=true;
-  });
 })();
 </script>
 </body></html>

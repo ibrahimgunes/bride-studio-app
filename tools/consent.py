@@ -49,29 +49,9 @@ def head_scripts(ga):
     """`</head>` içine. Onay ilanı gtag'den **önce** geliyor."""
     return f"""<script>
 window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}
-var bsOK=null;try{{bsOK=localStorage.getItem('bs-consent');}}catch(e){{}}
-// Ziyaretçi AB/İngiltere'de mi.
-//
-// Statik sitede sunucu yok, yani IP'ye bakamıyoruz; tarayıcının kendi saat
-// dilimi elimizdeki tek ipucu ve ağ isteği gerektirmiyor. Kaba ama yanılma
-// yönü doğru tarafa düşüyor: şüphede kalırsa band gösteriliyor.
-//
-// Neden hiç göstermemek yerine bölgeye bağlamak: band 90 günde toplanan
-// veriyi kesiyordu ve ölçemediğimiz şeyi yönetemiyoruz. AB dışında onay
-// aramamak veriyi geri getiriyor, AB'de aramak da riski yerinde tutuyor.
-function bsEU(){{
-  try{{
-    var z=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
-    if(/^Atlantic\/(Reykjavik|Azores|Canary|Madeira)$/.test(z))return true;
-    if(z.indexOf('Europe/')!==0)return false;
-    // Avrupa saat diliminde olup AB/AEA'da olmayanlar.
-    return !/^Europe\/(Istanbul|Moscow|Kirov|Volgograd|Saratov|Samara|Ulyanovsk|Astrakhan|Minsk)$/.test(z);
-  }}catch(e){{return true;}}
-}}
-var bsNeed=bsEU();
 gtag('consent','default',{{
  'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
- 'analytics_storage':(!bsNeed||bsOK==='yes')?'granted':'denied','wait_for_update':500}});
+ 'analytics_storage':'granted'}});
 gtag('js',new Date());gtag('config','{ga}');
 
 // App Store'a tıklama.
@@ -99,47 +79,17 @@ document.addEventListener('click',function(e){{
 
 
 def banner(lang):
-    """`</body>` öncesine. Seçim yapılmışsa hiç görünmüyor."""
-    text, yes, no = CONSENT.get(lang, CONSENT["en"])
-    return f"""<div id=bs-consent hidden>
-  <p>{text}</p>
-  <div class=bs-consent-actions>
-    <button type=button data-consent=no>{no}</button>
-    <button type=button data-consent=yes>{yes}</button>
-  </div>
-</div>
-<style>
-#bs-consent{{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
- max-width:660px;margin:0 auto;display:flex;gap:18px;align-items:center;
- flex-wrap:wrap;justify-content:space-between;
- background:{DARK};color:{CREAM};padding:18px 20px;border-radius:14px;
- box-shadow:0 10px 40px rgba(0,0,0,.28);font-size:14px;line-height:1.45}}
-#bs-consent[hidden]{{display:none}}
-#bs-consent p{{margin:0;flex:1 1 300px;color:{CREAM}}}
-.bs-consent-actions{{display:flex;gap:10px;flex:0 0 auto}}
-#bs-consent button{{font:inherit;cursor:pointer;padding:9px 18px;border-radius:999px;
- border:1px solid {MINK};background:transparent;color:{CREAM};white-space:nowrap}}
-#bs-consent button[data-consent=yes]{{background:{GOLD};border-color:{GOLD};color:{DARK}}}
-#bs-consent button:focus-visible{{outline:2px solid {CREAM};outline-offset:2px}}
-@media (max-width:520px){{
- #bs-consent{{flex-direction:column;align-items:stretch}}
- .bs-consent-actions{{display:grid;grid-template-columns:1fr 1fr}}
- #bs-consent button{{width:100%}}
-}}
-</style>
-<script>
-(function(){{
-  var box=document.getElementById('bs-consent'),saved=null;
-  try{{saved=localStorage.getItem('bs-consent');}}catch(e){{}}
-  // Band yalnızca onay gereken bölgede ve yalnızca henüz seçim yapılmamışsa.
-  if(saved===null&&(typeof bsEU!=='function'||bsEU()))box.hidden=false;
-  box.addEventListener('click',function(e){{
-    var pick=e.target.getAttribute&&e.target.getAttribute('data-consent');
-    if(!pick)return;
-    try{{localStorage.setItem('bs-consent',pick);}}catch(e){{}}
-    if(window.gtag)gtag('consent','update',
-      {{'analytics_storage':pick==='yes'?'granted':'denied'}});
-    box.hidden=true;
-  }});
-}})();
-</script>"""
+    """Çerez bandı kaldırıldı — 2026-08-24.
+
+    Önce herkese gösteriliyordu ve onay verilene kadar ölçüm kapalıydı; doksan
+    günde toplanan şey 47 oturum ve 10 kişiydi, çoğu da bağlantı denemesi.
+    Sonra yalnızca AB'de gösterilecek şekilde daraltıldı. Kullanıcı ikisini de
+    istemedi ve karar onun: band tamamen kalkıyor, `analytics_storage` her
+    ziyaretçide baştan açık.
+
+    Bunun bedeli AB tarafında hukuki: orada analitik çerezi onaysız
+    çalıştırmak ePrivacy'ye aykırı. Karar bilinerek verildi.
+
+    Fonksiyon duruyor ki üreticide çağrıldığı yerler bozulmasın; boş dönüyor.
+    """
+    return ""
