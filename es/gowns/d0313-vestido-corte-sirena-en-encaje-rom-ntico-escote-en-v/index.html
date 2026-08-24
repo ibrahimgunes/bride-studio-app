@@ -52,6 +52,27 @@ gtag('consent','default',{
  'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
  'analytics_storage':(!bsNeed||bsOK==='yes')?'granted':'denied','wait_for_update':500});
 gtag('js',new Date());gtag('config','G-CGJLBG4684');
+
+// App Store'a tıklama.
+//
+// Sayfanın tek işi kadını mağazaya götürmek ve o adım bugüne kadar hiç
+// ölçülmüyordu: kaç kişinin sayfaya geldiğini biliyorduk, kaçının çıkıp
+// gittiğini bilmiyorduk. Ücretli bir denemede eksik olan tam bu sayı —
+// tıklama başına maliyet ancak tıklama sayılırsa hesaplanıyor.
+//
+// Dinleyici belgeye bağlı, düğmelere tek tek değil: sayfada mağazaya giden
+// iki bağlantı var (üstteki düğme ve alttaki rozet) ve üçüncüsü eklendiğinde
+// burayı kimse hatırlamayacak.
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a[href*="apps.apple.com"]');
+  if(!a||!window.gtag)return;
+  gtag('event','store_click',{
+    page_path:location.pathname,
+    // Reklam hangi kaynaktan getirdiyse o etikette duruyor; tıklamayı
+    // kaynağına bağlayan şey bu.
+    source:new URLSearchParams(location.search).get('utm_source')||'(none)'
+  });
+},true);
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGJLBG4684"></script>
 </head>
