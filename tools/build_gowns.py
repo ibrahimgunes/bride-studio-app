@@ -20,7 +20,7 @@ değişiklikte bayatlıyor. Bu betik her seferinde baştan üretiyor.
     assets/gowns/<id>.jpg                   vitrin karesi
     sitemap.xml
 """
-import json, subprocess, argparse, pathlib, re, shutil, sys, urllib.request
+import json, subprocess, argparse, pathlib, re, shutil, sys, unicodedata, urllib.request
 import concurrent.futures as cf
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
@@ -433,7 +433,133 @@ def gown_page(d, lang, path_map):
 </body></html>"""
 
 
-def index_page(dresses, lang, paths):
+# Katalog sözlüğü — kategori adlarının on bir dildeki karşılığı burada.
+VOCAB = json.loads(pathlib.Path(
+    "/Users/ibrahimgunes/Desktop/PROJECTS/bride-studio-firebase/tools/catalogue/vocab.json"
+).read_text(encoding="utf-8"))
+
+# Kaç gelinlikten azına sayfa açılmıyor.
+#
+# Üç gelinlikli bir sayfa hem kadına az şey gösteriyor hem aramada zayıf
+# duruyor. Brocade (3) ve Organza (10) bu yüzden dışarıda.
+CATEGORY_MIN = 15
+
+# Sıfat önce mi sonra mı.
+#
+# "Mermaid Wedding Dresses" ve "Balık Kesim Gelinlikler" sıfatı öne alıyor;
+# Latin dillerinde ise isim önce geliyor — "vestidos de novia sirena". Yanlış
+# sıra hem okunmuyor hem aranmıyor.
+ADJ_AFTER = {"es", "fr", "it", "pt-BR"}
+
+
+def _ascii(text):
+    """Adres için ASCII'ye indirger.
+
+    `unicodedata` aksanların çoğunu ayırıyor ama Türkçe `ı` ve Almanca `ß`
+    onun tablosunda yok — "balık kesim" düz normalizasyonda "bal-k-kesim"
+    oluyordu, harfin yerinde tire kalıyor. O yüzden önce elle eşleniyor.
+    """
+    fix = str.maketrans({"ı": "i", "İ": "i", "ş": "s", "Ş": "s", "ğ": "g",
+                         "Ğ": "g", "ü": "u", "Ü": "u", "ö": "o", "Ö": "o",
+                         "ç": "c", "Ç": "c", "ß": "ss", "å": "a", "ø": "o"})
+    t = unicodedata.normalize("NFKD", text.translate(fix))
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
+def cat_slug(field, value, lang):
+    """Kategori adresi.
+
+    Gelinlik adresleriyle çakışmıyor: onlar `d0467-` diye kimlikle başlıyor,
+    kategoriler harfle.
+
+    Latin olmayan yazılarda İngilizce karşılığa düşülüyor. Eşik iki harf:
+    Japoncada "Aライン" düz süzmeden geçince geriye yalnızca "a" kalıyor ve
+    tek harflik bir adres ne okunuyor ne aranıyor.
+    """
+    word = VOCAB[field][value].get(lang) or VOCAB[field][value]["en"]
+    s = re.sub(r"[^a-z0-9]+", "-", _ascii(word).lower()).strip("-")[:40].rstrip("-")
+    if len(s) > 2:
+        return s
+    return re.sub(r"[^a-z0-9]+", "-", _ascii(VOCAB[field][value]["en"]).lower()).strip("-")[:40].rstrip("-")
+
+
+def categories(dresses):
+    """Sayfası açılacak kategoriler: (alan, değer, gelinlikler).
+
+    Aramanın gittiği yer tekil ürün değil kategori: kimse "Romantic Organza
+    Ballgown Mini with an off-the-shoulder neckline" yazmıyor, "short wedding
+    dress" yazıyor. Katalog zaten etiketli, o etiketlerden sayfa çıkıyor.
+    """
+    out = []
+    for field in ("silhouette", "style", "fabric", "length"):
+        seen = {}
+        for d in dresses:
+            v = d["meta"].get(field)
+            if v:
+                seen.setdefault(v, []).append(d)
+        for value, group in seen.items():
+            # Uzunlukta yalnızca kısa olan anlamlı: katalogun neredeyse
+            # tamamı yere kadar, "floor" sayfası kataloğun kopyası olurdu.
+            if field == "length" and value != "Mini":
+                continue
+            if len(group) < CATEGORY_MIN or value not in VOCAB.get(field, {}):
+                continue
+            out.append((field, value, group))
+    return out
+
+
+def cat_title(field, value, lang):
+    """Sayfa başlığı, o dilin sırasına göre."""
+    word = VOCAB[field][value].get(lang) or VOCAB[field][value]["en"]
+    noun = UI[lang][0]
+    if lang in ADJ_AFTER:
+        return f"{noun} {word}"
+    return f"{word.title()} {noun.lower()}" if lang in ("en",) else f"{word.title()} {noun}"
+
+
+def category_page(field, value, group, lang, paths, all_cats):
+    code = LANGS[lang]
+    ui = UI[lang]
+    title = cat_title(field, value, lang)
+    sl = {l: cat_slug(field, value, l) for l in LANGS}
+    canonical = f"{SITE}/{code + '/' if code else ''}gowns/{sl[lang]}/"
+    alternates = [(l, f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/{sl[l]}/") for l in LANGS]
+
+    cards = []
+    for d in group:
+        t = d["title"].get(lang) or d["title"].get("en", d["id"])
+        cards.append(
+            f'<a class=card href="{SITE}/{code + "/" if code else ""}gowns/{paths[d["id"]][lang]}/">'
+            f'<img src="/assets/gowns/{d["id"]}.jpg" alt="{esc(t)}" loading="lazy" width="1000" height="1000">'
+            f'<h2>{esc(t)}</h2></a>')
+
+    # Kardeş kategoriler — Google'ın sayfaları bulmasının yolu ve kadının
+    # aradığını bulamadığında gideceği yer.
+    sib = []
+    for f2, v2, g2 in all_cats:
+        if (f2, v2) == (field, value):
+            continue
+        s2 = cat_slug(f2, v2, lang)
+        sib.append(f'<a href="{SITE}/{code + "/" if code else ""}gowns/{s2}/">'
+                   f'{esc(cat_title(f2, v2, lang))}</a>')
+
+    desc = f"{len(group)} · {title}"
+    return f"""{head(lang, esc(title) + " — Bride Studio", esc(desc), canonical, alternates, f"/assets/gowns/{group[0]['id']}.jpg")}
+<header><a class=mark href="{SITE}/{code + '/' if code else ''}">Bride Studio</a>
+<nav>{lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/{sl[l]}/")}</nav></header>
+<main class=grid-wrap>
+  <h1 class=page-title>{esc(title)}</h1>
+  <p class=cat-count>{len(group)}</p>
+  <div class=grid>{''.join(cards)}</div>
+  <nav class=cat-nav>{''.join(sib)}</nav>
+  <p><a href="{SITE}/{code + '/' if code else ''}gowns/">{esc(ui[7])}</a></p>
+</main>
+<footer><a class=badge href="{APPSTORE}"><img src="/assets/appstore-badge.svg" alt="Download on the App Store" height="46"></a></footer>
+{consent.banner(lang)}
+</body></html>"""
+
+
+def index_page(dresses, lang, paths, cats=()):
     code = LANGS[lang]
     ui = UI[lang]
     canonical = f"{SITE}/{code + '/' if code else ''}gowns/"
@@ -445,11 +571,23 @@ def index_page(dresses, lang, paths):
             f'<a class=card href="{SITE}/{code + "/" if code else ""}gowns/{paths[d["id"]][lang]}/">'
             f'<img src="/assets/gowns/{d["id"]}.jpg" alt="{esc(t)}" loading="lazy" width="1000" height="1000">'
             f'<h2>{esc(t)}</h2></a>')
+    # Kategori bağlantıları galerinin başında.
+    #
+    # Sitemap onları listeliyor ama Google bir sayfayı yalnızca listede
+    # gördüğü için değerli saymıyor; ona giden bir bağlantı da olmalı. Bu
+    # aynı zamanda kadının aradığı kesimi bulmasının yolu.
+    catlinks = []
+    for f2, v2, g2 in cats:
+        s2 = cat_slug(f2, v2, lang)
+        catlinks.append(f'<a href="{SITE}/{code + "/" if code else ""}gowns/{s2}/">'
+                        f'{esc(cat_title(f2, v2, lang))}</a>')
+
     return f"""{head(lang, esc(ui[0]) + " — Bride Studio", esc(ui[0]), canonical, alternates, f"/assets/gowns/{dresses[0]['id']}.jpg")}
 <header><a class=mark href="{SITE}/{code + '/' if code else ''}">Bride Studio</a>
 <nav>{lang_picker(lang, lambda l: f"{SITE}/{LANGS[l] + '/' if LANGS[l] else ''}gowns/")}</nav></header>
 <main class=grid-wrap>
   <h1 class=page-title>{esc(ui[0])}</h1>
+  <nav class=cat-nav>{''.join(catlinks)}</nav>
   <div class=grid>{''.join(cards)}</div>
 </main>
 <footer><a class=badge href="{APPSTORE}"><img src="/assets/appstore-badge.svg" alt="Download on the App Store" height="46"></a>
@@ -460,7 +598,12 @@ def index_page(dresses, lang, paths):
 </body></html>"""
 
 
-CSS = """/* Gelinlik sayfaları — ana sayfayla aynı dil, ayrı dosyada.
+CSS = """.cat-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
+.cat-nav a{font-size:13px;padding:7px 14px;border:1px solid var(--hair);
+  border-radius:20px;color:var(--taupe);text-decoration:none;background:#fff}
+.cat-nav a:hover{color:var(--ink);border-color:var(--gold)}
+.cat-count{color:var(--taupe);font-size:14px;margin:-14px 0 24px}
+/* Gelinlik sayfaları — ana sayfayla aynı dil, ayrı dosyada.
    Bin altı yüz sayfa aynı stili taşıyacak; satır içine gömmek her sayfayı
    şişirir, ayrı dosya bir kez indirilip önbelleğe giriyor. */
 /* Logonun yazısı, ana sayfadakiyle aynı.
@@ -683,6 +826,8 @@ def sweep(dresses, paths, apply):
         if not base.is_dir():
             continue
         keep = {paths[d["id"]][lang] for d in dresses}
+        # Kategori klasörleri de korunuyor — gelinlik slug'ı değiller.
+        keep |= {cat_slug(f, v, lang) for f, v, _ in categories(dresses)}
         gone += [c for c in base.iterdir() if c.is_dir() and c.name not in keep]
 
     live = {d["id"].lower() for d in dresses}
@@ -731,6 +876,8 @@ def main():
         print("kuru çalışma — yazmak için --apply")
         return
 
+    cats = categories(dresses)
+    print(f"kategori sayfası: {len(cats)} × {len(LANGS)} dil")
     download_images(dresses, True)
     (ROOT / "assets").mkdir(exist_ok=True)
     (ROOT / "assets" / "gowns.css").write_text(CSS)
@@ -745,8 +892,16 @@ def main():
             urls.append(f"{SITE}/{code + '/' if code else ''}gowns/{paths[d['id']][lang]}/")
         gi = base / "gowns"
         gi.mkdir(parents=True, exist_ok=True)
-        (gi / "index.html").write_text(index_page(dresses, lang, paths))
+        (gi / "index.html").write_text(index_page(dresses, lang, paths, cats))
         urls.append(f"{SITE}/{code + '/' if code else ''}gowns/")
+
+        for field, value, group in cats:
+            cs = cat_slug(field, value, lang)
+            cp = gi / cs
+            cp.mkdir(parents=True, exist_ok=True)
+            (cp / "index.html").write_text(
+                category_page(field, value, group, lang, paths, cats))
+            urls.append(f"{SITE}/{code + '/' if code else ''}gowns/{cs}/")
 
     # Sitemap olmadan Google bu sayfaların çoğunu aylarca bulamaz: hiçbirine
     # ana sayfadan doğrudan bağlantı yok.

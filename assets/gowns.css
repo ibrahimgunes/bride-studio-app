@@ -1,3 +1,8 @@
+.cat-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
+.cat-nav a{font-size:13px;padding:7px 14px;border:1px solid var(--hair);
+  border-radius:20px;color:var(--taupe);text-decoration:none;background:#fff}
+.cat-nav a:hover{color:var(--ink);border-color:var(--gold)}
+.cat-count{color:var(--taupe);font-size:14px;margin:-14px 0 24px}
 /* Gelinlik sayfaları — ana sayfayla aynı dil, ayrı dosyada.
    Bin altı yüz sayfa aynı stili taşıyacak; satır içine gömmek her sayfayı
    şişirir, ayrı dosya bir kez indirilip önbelleğe giriyor. */
