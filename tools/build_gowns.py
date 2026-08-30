@@ -622,6 +622,45 @@ footer{max-width:1180px;margin:0 auto;padding:40px 30px 70px;border-top:1px soli
 """
 
 
+def sweep(dresses, paths, apply):
+    """Katalogdan çıkmış gelinliklerin sayfalarını siler.
+
+    Betik her koşuda sayfaları üzerine yazıyor ama silinmiş bir gelinliğin
+    klasörüne dokunmuyordu. Katalogdan çıkan gelinlik sitemap'ten düşüyor,
+    galeriden düşüyor — ve adresi açık kalmaya devam ediyor, Google'ın
+    indeksinde de öyle. 2026-08-30'da katalogdan dört gelinlik çıktı ve
+    sayfaları yerinde duruyordu.
+
+    Karşılaştırma dil dil yapılıyor, çünkü slug başlıktan üretiliyor ve
+    başlık her dilde başka: bir gelinliğin adı değişirse eski slug da bu
+    yolla temizleniyor.
+    """
+    gone = []
+    for lang, code in LANGS.items():
+        base = (ROOT / code if code else ROOT) / "gowns"
+        if not base.is_dir():
+            continue
+        keep = {paths[d["id"]][lang] for d in dresses}
+        gone += [c for c in base.iterdir() if c.is_dir() and c.name not in keep]
+
+    live = {d["id"].lower() for d in dresses}
+    art = ROOT / "assets" / "gowns"
+    if art.is_dir():
+        gone += [f for f in art.iterdir() if f.stem.lower() not in live]
+
+    if not gone:
+        return
+    print(f"katalogda olmayan {len(gone)} klasör/dosya siliniyor")
+    for g in sorted(gone)[:6]:
+        print("  ", g.relative_to(ROOT))
+    if len(gone) > 6:
+        print(f"   … ve {len(gone) - 6} tane daha")
+    if not apply:
+        return
+    for g in gone:
+        shutil.rmtree(g) if g.is_dir() else g.unlink()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -642,6 +681,7 @@ def main():
 
     pages = len(dresses) * len(LANGS) + len(LANGS)
     print(f"üretilecek: {pages} sayfa ({len(LANGS)} dil)")
+    sweep(dresses, paths, a.apply)
     if not a.apply:
         d = dresses[0]
         print("örnek adres:", f"/gowns/{paths[d['id']]['en']}/")
