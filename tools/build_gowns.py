@@ -202,8 +202,24 @@ def download_images(dresses, apply):
         gowns.mkdir(parents=True, exist_ok=True)
         forms.mkdir(parents=True, exist_ok=True)
 
-    def fetch(src, dst, box, tag):
-        if not src or (dst.exists() and dst.stat().st_size > 0):
+    # Hangi karenin indirildiği yazılıyor.
+    #
+    # Dosyanın **varlığına** bakmak yetmiyor: sitedeki ad sabit
+    # (`gowns/D0417.jpg`) ama kaynağı değişiyor. Vitrin yenilendiğinde
+    # `promote_results` yeni bir damgayla yazıyor —
+    # `models/model_20260830095851.webp` — ve eski ada bakan bir kontrol
+    # "dosya duruyor" deyip geçiyordu. 2026-08-30'da beğenilmeyen on dört
+    # vitrin yeniden üretildi ve sitede hepsi eski kareyi göstermeye devam
+    # etti; kusur ancak gözle fark edildi.
+    stamp = ROOT / "assets" / "sources.json"
+    seen = json.loads(stamp.read_text()) if stamp.exists() else {}
+    now = {}
+
+    def fetch(src, dst, box, tag, key):
+        if not src:
+            return
+        now[key] = src
+        if seen.get(key) == src and dst.exists() and dst.stat().st_size > 0:
             return
         if not apply:
             return
@@ -217,13 +233,20 @@ def download_images(dresses, apply):
         im.save(dst, quality=84, optimize=True)
 
     def one(d):
-        fetch(d["image"], gowns / f"{d['id']}.jpg", 1000, "g")
+        fetch(d["image"], gowns / f"{d['id']}.jpg", 1000, "g", f"g:{d['id']}")
         # Kalıp karesi sayfada 360 px genişliğinde duruyor; vitrin karesi
         # kadar büyük inmesine gerek yok.
-        fetch(d.get("raw"), forms / f"{d['id']}.jpg", 720, "f")
+        fetch(d.get("raw"), forms / f"{d['id']}.jpg", 720, "f", f"f:{d['id']}")
 
     with cf.ThreadPoolExecutor(12) as ex:
         list(ex.map(one, dresses))
+
+    stale = [k for k, v in now.items() if seen.get(k) != v]
+    if stale:
+        print(f"kaynağı değişmiş {len(stale)} kare"
+              + ("" if apply else " (yazmak için --apply)"))
+    if apply:
+        stamp.write_text(json.dumps(now, indent=1, sort_keys=True) + "\n")
 
 
 def head(lang, title, desc, canonical, alternates, image):
