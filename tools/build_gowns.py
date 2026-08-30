@@ -160,6 +160,8 @@ def fetch_dresses(tok):
                 "desc": {k: sv(v) for k, v in desc.items()},
                 "meta": {k: sv(v) for k, v in meta.items()},
                 "image": sv(media.get("modelView")),
+                # Terzi kalıbındaki hâli — `.tf` bölümünün sol karesi.
+                "raw": sv(media.get("rawSource")),
             })
         page = d.get("nextPageToken")
         if not page:
@@ -178,30 +180,47 @@ def slug(text, did):
 
 
 def download_images(dresses, apply):
-    """Vitrin karelerini siteye indirir.
+    """Her gelinliğin iki karesini siteye indirir.
 
     Storage'a doğrudan bağlanmıyoruz: sayfalar statik ve depoda duran bir
     dosyaya bakmaları gerekiyor, yoksa hem imza süresi dolan adresler hem de
     her ziyarette Storage faturası çıkardı.
-    """
-    out = ROOT / "assets" / "gowns"
-    if apply:
-        out.mkdir(parents=True, exist_ok=True)
 
-    def one(d):
-        dst = out / f"{d['id']}.jpg"
-        if not d["image"] or (dst.exists() and dst.stat().st_size > 0):
+    İki kare, çünkü sayfanın anlattığı şey bir olay: `gowns/` vitrin karesi,
+    `forms/` gelinliğin terzi kalıbındaki hâli. `.tf` bölümü ikisini üst üste
+    koyup aralarından perde geçiriyor.
+
+    **Ham kare uzun süre indirilmiyordu.** `forms/` bir kez elle doldurulmuş,
+    betik ise yalnızca vitrini indiriyordu; dosyası olmayan gelinlikte bölüm
+    `return ""` ile sessizce düşüyor. 2026-08-30'da katalog 175'ten 296'ya
+    çıkınca 121 sayfa o bölüm olmadan basıldı ve eksiklik ancak göze
+    çarptığı için fark edildi.
+    """
+    gowns = ROOT / "assets" / "gowns"
+    forms = ROOT / "assets" / "forms"
+    if apply:
+        gowns.mkdir(parents=True, exist_ok=True)
+        forms.mkdir(parents=True, exist_ok=True)
+
+    def fetch(src, dst, box, tag):
+        if not src or (dst.exists() and dst.stat().st_size > 0):
             return
         if not apply:
             return
-        tmp = f"/tmp/_g_{d['id']}"
-        subprocess.run(["gcloud", "storage", "cp",
-                        f"gs://{BUCKET}/{d['image']}", tmp], capture_output=True)
+        tmp = f"/tmp/_{tag}_{dst.stem}"
+        subprocess.run(["gcloud", "storage", "cp", f"gs://{BUCKET}/{src}", tmp],
+                       capture_output=True)
         if not pathlib.Path(tmp).exists():
             return
         im = Image.open(tmp).convert("RGB")
-        im.thumbnail((1000, 1000), Image.LANCZOS)
+        im.thumbnail((box, box), Image.LANCZOS)
         im.save(dst, quality=84, optimize=True)
+
+    def one(d):
+        fetch(d["image"], gowns / f"{d['id']}.jpg", 1000, "g")
+        # Kalıp karesi sayfada 360 px genişliğinde duruyor; vitrin karesi
+        # kadar büyük inmesine gerek yok.
+        fetch(d.get("raw"), forms / f"{d['id']}.jpg", 720, "f")
 
     with cf.ThreadPoolExecutor(12) as ex:
         list(ex.map(one, dresses))
@@ -644,9 +663,10 @@ def sweep(dresses, paths, apply):
         gone += [c for c in base.iterdir() if c.is_dir() and c.name not in keep]
 
     live = {d["id"].lower() for d in dresses}
-    art = ROOT / "assets" / "gowns"
-    if art.is_dir():
-        gone += [f for f in art.iterdir() if f.stem.lower() not in live]
+    for kind in ("gowns", "forms"):
+        art = ROOT / "assets" / kind
+        if art.is_dir():
+            gone += [f for f in art.iterdir() if f.stem.lower() not in live]
 
     if not gone:
         return
