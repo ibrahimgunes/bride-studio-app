@@ -20,7 +20,7 @@ değişiklikte bayatlıyor. Bu betik her seferinde baştan üretiyor.
     assets/gowns/<id>.jpg                   vitrin karesi
     sitemap.xml
 """
-import json, subprocess, argparse, pathlib, re, shutil, sys, unicodedata, urllib.request
+import hashlib, json, subprocess, argparse, pathlib, re, shutil, sys, unicodedata, urllib.request
 import concurrent.futures as cf
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
@@ -126,6 +126,16 @@ LANG_NAMES = {
 }
 
 APPSTORE = "https://apps.apple.com/app/id6741838118"
+
+# Stil dosyasının sürümü.
+#
+# Adres sabit olduğu için tarayıcı bir kez indirdiğini bir daha sormuyor:
+# sayfa yeni gelirken stil eskide kalıyor ve düzen bozuk görünüyor. Kategori
+# şeridi tam bu yüzden düz metin olarak çıktı — HTML yeniydi, CSS önbellekten
+# geliyordu. Damga içerikten türüyor, yani stil değişmedikçe adres de
+# değişmiyor ve önbellek boşuna bozulmuyor.
+def css_stamp():
+    return hashlib.sha1(CSS.encode()).hexdigest()[:8]
 
 
 def token():
@@ -281,7 +291,7 @@ def head(lang, title, desc, canonical, alternates, image):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/gowns.css">
+<link rel="stylesheet" href="/assets/gowns.css?v={css_stamp()}">
 {consent.head_scripts(GA)}
 </head>
 <body>{langhint.strip(lang)}"""
