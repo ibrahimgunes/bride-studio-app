@@ -48,6 +48,24 @@ CREAM, INK, MINK, GOLD, DARK = "#FAF7F4", "#3C3732", "#A58E7C", "#BD9973", "#141
 def head_scripts(ga):
     """`</head>` içine. Onay ilanı gtag'den **önce** geliyor."""
     return f"""<script>
+// Kendi ziyaretlerimiz sayılmasın.
+//
+// Ölçüldü (19 Eylül 2026): son 30 günün 80 oturumundan 66'sı Türkiye'den,
+// 11 kişi, 228 sayfa görüntüleme — büyük ölçüde kendi testlerimiz. Trafik
+// bu kadar azken bu, sayıyı okunamaz hâle getiriyor.
+//
+// GA4'ün kendi IP süzgeci burada işe yaramıyor: test telefondan mobil
+// veriyle de yapılıyor ve IP her seferinde değişiyor. Bunun yerine cihaza
+// bir kez işaret konuyor — siteye `?me=1` ile girilen tarayıcıda gtag bir
+// daha **hiç yüklenmiyor**, Pinterest'ten gelinse de doğrudan gelinse de.
+// Geri almak için `?me=0`.
+var bsIc=false;
+try{{
+  var bsQ=new URLSearchParams(location.search).get('me');
+  if(bsQ==='1'){{localStorage.setItem('bs-internal','1');}}
+  if(bsQ==='0'){{localStorage.removeItem('bs-internal');}}
+  bsIc=localStorage.getItem('bs-internal')==='1';
+}}catch(e){{}}
 window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}
 gtag('consent','default',{{
  'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied',
@@ -74,8 +92,17 @@ document.addEventListener('click',function(e){{
     source:new URLSearchParams(location.search).get('utm_source')||'(none)'
   }});
 }},true);
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id={ga}"></script>"""
+
+// gtag yalnız iç ziyaretçi değilse yükleniyor. Etiketi statik bırakıp
+// olayları susturmak yetmezdi: betik inerse GA4 sayfa görüntülemesini
+// kendisi gönderiyor.
+if(!bsIc){{
+  var bsS=document.createElement('script');
+  bsS.async=true;
+  bsS.src='https://www.googletagmanager.com/gtag/js?id={ga}';
+  document.head.appendChild(bsS);
+}}
+</script>"""
 
 
 def banner(lang):

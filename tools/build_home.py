@@ -20,6 +20,7 @@ import langhint
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://bridestudio.app"
+GA   = "G-CGJLBG4684"
 
 # Adres yolundaki kod. İngilizce kökte, yani yolu yok.
 LANGS = {"en": "", "tr": "tr", "de": "de", "es": "es", "fr": "fr", "it": "it",
@@ -357,6 +358,25 @@ def swap_consent(page, lang):
     """
     page = re.sub(r"<div id=bs-consent\b.*?</script>", "", page, flags=re.S)
     page = re.sub(r"<div id=bs-lang\b.*?</script>", "", page, flags=re.S)
+
+    # GA4 bloğu tek kaynaktan: `consent.head_scripts`.
+    #
+    # Burası bir kez ayrıştı ve ölçümü sessizce durdurdu. Çerez bandı
+    # 24 Ağustos 2026'da kaldırılıp analitik herkese açıldı, ama `index.html`
+    # içindeki kopya güncellenmedi: sayfa hâlâ `bs-consent==='yes'` arıyordu
+    # ve o değeri artık koyan bir şey yoktu, yani on beş ana sayfada
+    # `analytics_storage` kalıcı olarak **denied** kaldı. Gelinlik sayfaları
+    # doğru ölçerken ana sayfalar ölçmüyordu.
+    #
+    # Sökme hem eski biçimi (statik gtag etiketi) hem yenisini yakalıyor —
+    # `index.html` kendi çıktısının girdisi olduğu için her turda sökülüp
+    # yeniden konuyor.
+    page = re.sub(r"<script>\s*//[^\n]*\n?(?:(?!</script>).)*?window\.dataLayer.*?</script>",
+                  "", page, flags=re.S)
+    page = re.sub(r"<script>\s*window\.dataLayer.*?</script>", "", page, flags=re.S)
+    page = re.sub(r'<script async src="https://www\.googletagmanager\.com[^"]*"></script>',
+                  "", page)
+    page = page.replace("</head>", consent.head_scripts(GA) + "\n</head>", 1)
     page = page.replace("<body>", "<body>" + langhint.strip(lang), 1)
     return page.replace("</body>", consent.banner(lang) + "\n</body>", 1)
 
