@@ -52,6 +52,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 LANGS = {
     "en": "",   "tr": "tr", "de": "de", "es": "es", "fr": "fr", "it": "it",
     "pt-BR": "pt", "ja": "ja", "ko": "ko", "zh-Hans": "zh", "hi": "hi",
+    # 18 Eylül 2026'da uygulamaya eklendi; gelinliklerin başlık ve açıklaması
+    # dört dilde de Firestore'da hazır ([[project-slavic-localisation]]).
+    "pl": "pl", "cs": "cs", "uk": "uk", "ru": "ru",
 }
 
 # Sayfadaki sabit metinler. Gelinliğin kendi başlığı ve açıklaması zaten
@@ -68,6 +71,10 @@ UI = {
     "ko": ("웨딩드레스", "직접 입어보기", "소재", "네크라인", "실루엣", "기장", "디테일", "전체 컬렉션 보기", "App Store에서 받기"),
     "zh-Hans": ("婚纱", "在自己身上试穿", "面料", "领口", "廓形", "长度", "细节", "查看全部系列", "在 App Store 下载"),
     "hi": ("वेडिंग ड्रेस", "खुद पर आज़माएँ", "कपड़ा", "नेकलाइन", "सिल्हूट", "लंबाई", "डिटेल", "पूरा कलेक्शन देखें", "App Store से डाउनलोड करें"),
+    "pl": ("Suknie ślubne", "Przymierz na sobie", "Tkanina", "Dekolt", "Fason", "Długość", "Detal", "Zobacz całą kolekcję", "Pobierz w App Store"),
+    "cs": ("Svatební šaty", "Vyzkoušejte na sobě", "Látka", "Výstřih", "Střih", "Délka", "Detail", "Zobrazit celou kolekci", "Stáhnout v App Store"),
+    "uk": ("Весільні сукні", "Приміряйте на себе", "Тканина", "Виріз", "Силует", "Довжина", "Деталь", "Переглянути всю колекцію", "Завантажити в App Store"),
+    "ru": ("Свадебные платья", "Примерьте на себе", "Ткань", "Вырез", "Силуэт", "Длина", "Деталь", "Смотреть всю коллекцию", "Загрузить в App Store"),
 }
 
 # Denklemin altındaki üç kelime. Cümle değil etiket: kareler zaten anlatıyor,
@@ -92,6 +99,10 @@ EQUATION = {
     "ko": ("그녀의 사진", "이 드레스", "입은 모습"),
     "zh-Hans": ("她的照片", "这件婚纱", "穿上后"),
     "hi": ("उनकी फ़ोटो", "यह ड्रेस", "उन पर"),
+    "pl": ("Jej zdjęcie", "Ta suknia", "Na niej"),
+    "cs": ("Její fotka", "Tyto šaty", "Na ní"),
+    "uk": ("Її фото", "Ця сукня", "На ній"),
+    "ru": ("Её фото", "Это платье", "На ней"),
 }
 
 # Dönüşümün altındaki satır.
@@ -115,6 +126,10 @@ PROMISE = {
     "ko": "이 드레스를 당신의 얼굴, 키, 체형, 피부톤으로 입어보세요.",
     "zh-Hans": "用你的脸庞、身高、身形和肤色试穿这件婚纱。",
     "hi": "इस ड्रेस को अपने चेहरे, कद, नाप और रंगत के साथ आज़माएँ।",
+    "pl": "Przymierz tę suknię z własną twarzą, wzrostem, rozmiarem i odcieniem skóry.",
+    "cs": "Vyzkoušejte si tyto šaty s vlastní tváří, výškou, velikostí a odstínem pleti.",
+    "uk": "Приміряйте цю сукню з власним обличчям, зростом, розміром і відтінком шкіри.",
+    "ru": "Примерьте это платье со своим лицом, ростом, размером и оттенком кожи.",
 }
 
 # Dilin kendi adı, İngilizcesi değil: menüde "Türkçe" arayan biri "Turkish"
@@ -123,6 +138,7 @@ LANG_NAMES = {
     "en": "English", "tr": "Türkçe", "de": "Deutsch", "es": "Español",
     "fr": "Français", "it": "Italiano", "pt-BR": "Português", "ja": "日本語",
     "ko": "한국어", "zh-Hans": "简体中文", "hi": "हिन्दी",
+    "pl": "Polski", "cs": "Čeština", "uk": "Українська", "ru": "Русский",
 }
 
 APPSTORE = "https://apps.apple.com/app/id6741838118"
@@ -671,12 +687,14 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 .tf-tag{position:absolute;left:5%;top:calc(34% - 40px);z-index:3;pointer-events:none;
   display:flex;align-items:flex-start;gap:clamp(6px,1vw,12px);
   opacity:0;transform:translate(-10px,6px) scale(.94)}
-/* Madalyon büyütüldü (62-92 → 84-116, 2026-08-20). Telefonda karenin beşte
-   biri kadardı ve sayfanın bütün hikâyesi o: ziyaretçi Pinterest'ten geliyor ve
-   ilk gördüğü şey stok gibi duran bir gelin fotoğrafı. Onu stoktan ayıran tek
-   şey madalyon ve ok; küçük kalınca hikâye anlatılmıyor, süs gibi duruyor.
-   Daha büyüğü gelinlikle yarışmaya başlar, ve satılan şey gelinlik. */
-.tf-tag figure{margin:0;width:clamp(84px,9vw,116px);flex:0 0 auto;
+/* Madalyon: 62-92 → 84-116 (2026-08-20) → 64-92 (2026-09-19).
+   Büyütme gerekçesi şuydu: telefonda karenin beşte biri kadardı ve sayfayı
+   stok fotoğraftan ayıran tek şey madalyon ile ok. Ama masaüstünde fazla
+   geldi — kullanıcının sözü: *"şu surat çok büyük, onu App Store'daki gibi
+   yapalım."* Mağaza karesinde halka gelinliğin omzuna oturuyor ve kadının
+   başından küçük duruyor; burada başından büyüktü ve gelinlikle yarışıyordu,
+   oysa satılan şey gelinlik. */
+.tf-tag figure{margin:0;width:clamp(64px,6.5vw,92px);flex:0 0 auto;
   border-radius:50%;overflow:hidden;border:4px solid #fff;
   box-shadow:0 10px 30px rgba(20,16,14,.42);line-height:0}
 /* Yalnızca madalyondaki yüz. Eskiden `.tf-tag img` idi ve kutudaki her
@@ -687,7 +705,9 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:1
 /* Ok sağa doğru yatırıldı: çizim dikeye yakın çıkıyor ve madalyonun hemen
    üstünü işaret ediyordu, oysa kadın sağda. Dönme ekseni sol alt köşe, yani
    ok madalyondan çıkmaya devam ediyor, yalnızca ucu sağa gidiyor. */
-.tf-arrow{width:clamp(28px,3.3vw,42px);height:auto;margin-top:-64px;
+/* Okun boyu ve yukarı kaçışı madalyonla birlikte küçüldü (42→34, -64→-48):
+   sabit kalsaydı küçülen halkanın yanında orantısız uzun dururdu. */
+.tf-arrow{width:clamp(24px,2.6vw,34px);height:auto;margin-top:-48px;
   border:0;border-radius:0;box-shadow:none;
   transform:rotate(24deg);transform-origin:bottom left;
   filter:drop-shadow(0 2px 6px rgba(20,16,14,.55))}
