@@ -296,12 +296,19 @@ def build(lang, src):
     words = "".join(f'<span class="word"><span>{w}</span></span> ' for w in headline.split())
     out = re.sub(r"<h1>.*?</h1>", f"<h1>{words.strip()}</h1>", out, count=1, flags=re.S)
 
-    # Kök göreli bağlantılar dilin köküne bakmalı.
-    out = out.replace('href="/gowns/"', f'href="{base}gowns/"')
-    out = out.replace('href="/"', f'href="{base}"')
-    out = out.replace('<html lang="en">', f'<html lang="{lang}">')
+    # Sayfa içi bağlantılar dilin köküne bakmalı. Kaynak dosya bunları mutlak
+    # yazıyor (`https://bridestudio.app/gowns/`); yalnız kök göreli biçimi
+    # aramak aylarca hiçbir şey eşleştirmedi ve Türkçe sayfadaki "Gelinlikler"
+    # menüsü İngilizce galeriyi açtı.
+    # Canonical önce yazılıyor: aşağıdaki `href="{SITE}/"` kuralı onu da
+    # yakalardı ve niyet okunmaz olurdu.
     out = out.replace(f'<link rel="canonical" href="{SITE}/">',
                       f'<link rel="canonical" href="{base}">')
+    out = out.replace(f'href="{SITE}/gowns/"', f'href="{base}gowns/"')
+    out = out.replace('href="/gowns/"', f'href="{base}gowns/"')
+    out = out.replace(f'href="{SITE}/"', f'href="{base}"')
+    out = out.replace('href="/"', f'href="{base}"')
+    out = out.replace('<html lang="en">', f'<html lang="{lang}">')
 
     # hreflang: on bir sürüm birbirinin kopyası sayılmasın.
     alts = "\n".join(

@@ -21,7 +21,9 @@ h1,h2{font-family:"New York",ui-serif,Georgia,serif;font-weight:400;line-height:
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}
 header{display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding:22px 30px;border-bottom:1px solid var(--hair)}
-.mark{font-family:"Million Astteroids","New York",ui-serif,Georgia,serif;font-size:30px;line-height:1;padding-top:4px}
+/* Punto ana sayfayla aynı: aynı logo iki sayfada iki boyda durmayacak. */
+.mark{font-family:"Million Astteroids","New York",ui-serif,Georgia,serif;font-size:42px;line-height:1;padding-top:6px}
+@media(max-width:760px){.mark{font-size:34px;padding-top:4px}}
 .back{font-size:14px;color:var(--taupe)}
 
 /* ── Dönüşüm ──────────────────────────────────────────────────────────────
